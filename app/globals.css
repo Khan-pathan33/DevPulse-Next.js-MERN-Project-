@@ -1,0 +1,489 @@
+@import "tailwindcss";
+
+:root {
+  --background: #110c13;
+  --foreground: #fcf4f6;
+  --card-bg: rgba(28, 19, 28, 0.75);
+  --card-border: rgba(244, 194, 209, 0.12);
+  --primary: #cf6d8a;
+  --primary-hover: #df7d9a;
+  --primary-glow: rgba(207, 109, 138, 0.28);
+  --dusty-pink: #d8829d;
+  --dusty-rose: #c06c84;
+  --rose-gold: #e2a76f;
+  --soft-mauve: #9a6d82;
+  --accent-sage: #7eb898;
+}
+
+[data-theme="light"] {
+  /* Rich, distinct Dusty Pink background */
+  --background: #f4d7df;
+  /* Deep plum noir for maximum contrast and crystal clear readability */
+  --foreground: #2b0e1b;
+  --card-bg: rgba(255, 255, 255, 0.88);
+  --card-border: rgba(184, 74, 108, 0.24);
+  --primary: #aa395c;
+  --primary-hover: #bf456b;
+  --primary-glow: rgba(170, 57, 92, 0.22);
+  --dusty-pink: #aa395c;
+  --dusty-rose: #8f2847;
+  --rose-gold: #b36319;
+  --soft-mauve: #7a3253;
+  --accent-sage: #2d6645;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Bouncy Buttons Utility */
+.btn-bouncy {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease !important;
+  will-change: transform;
+}
+
+.btn-bouncy:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+}
+
+.btn-bouncy:active {
+  transform: translateY(2px) scale(0.95) !important;
+}
+
+.btn-bouncy-subtle {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
+  will-change: transform;
+}
+
+.btn-bouncy-subtle:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+}
+
+.btn-bouncy-subtle:active {
+  transform: translateY(1px) scale(0.97) !important;
+}
+
+/* Glassmorphic utilities */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border);
+}
+
+.glass-nav {
+  background: rgba(17, 12, 19, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(244, 194, 209, 0.12);
+}
+
+.glass-footer {
+  background: rgba(18, 10, 20, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(244, 194, 209, 0.12);
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 130, 157, 0.4);
+  box-shadow: 0 14px 34px -10px rgba(207, 109, 138, 0.25);
+}
+
+/* Background grid pattern */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(244, 194, 209, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 194, 209, 0.04) 1px, transparent 1px);
+}
+
+/* Custom Dusty Pink Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(216, 130, 157, 0.28);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(216, 130, 157, 0.5);
+}
+
+/* Live Floating Keyframes */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-1.5deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(8px) scale(1.03);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 7s ease-in-out 1.5s infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 8s ease-in-out 0.8s infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse-slow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes eq-bounce {
+  0%, 100% {
+    height: 6px;
+    opacity: 0.6;
+  }
+  50% {
+    height: 22px;
+    opacity: 1;
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spin-reverse-slow 28s linear infinite;
+}
+
+.animate-eq-bar {
+  animation: eq-bounce 1.4s ease-in-out infinite;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(244, 194, 209, 0.03) 25%,
+    rgba(244, 194, 209, 0.1) 50%,
+    rgba(244, 194, 209, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* =========================================================================
+   LIGHT MODE: DUSTY PINK BACKGROUND WITH ULTRA-CRISP DEEP PLUM TEXT
+   ========================================================================= */
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Base Light Mode Layout & Background */
+[data-theme="light"] body {
+  background-color: #f4d7df !important;
+  color: #2b0e1b !important;
+}
+
+/* Glass Navigation and Footer in Light Mode */
+[data-theme="light"] .glass-nav {
+  background: rgba(244, 215, 223, 0.95) !important;
+  border-bottom: 1px solid rgba(184, 74, 108, 0.25) !important;
+  box-shadow: 0 4px 20px -4px rgba(184, 74, 108, 0.12);
+}
+
+[data-theme="light"] .glass-footer {
+  background: rgba(244, 215, 223, 0.96) !important;
+  border-top: 1px solid rgba(184, 74, 108, 0.25) !important;
+  box-shadow: 0 -8px 24px -6px rgba(184, 74, 108, 0.12);
+}
+
+[data-theme="light"] .glass-panel,
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.90) !important;
+  border-color: rgba(184, 74, 108, 0.22) !important;
+  box-shadow: 0 10px 30px -8px rgba(184, 74, 108, 0.14) !important;
+}
+
+[data-theme="light"] .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(184, 74, 108, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(184, 74, 108, 0.09) 1px, transparent 1px) !important;
+}
+
+/* Headings & prominent titles */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] .text-white:not(.btn-bouncy *):not(.btn-bouncy):not(button[type="submit"] *):not(button[type="submit"]) {
+  color: #2b0e1b !important;
+}
+
+/* Hero & Brand Gradient Titles in Light Mode */
+[data-theme="light"] h1 span.bg-clip-text {
+  background-image: linear-gradient(to right, #8f2847, #bf3f66, #8f2847) !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+}
+
+[data-theme="light"] a[href="/"] span.bg-clip-text {
+  background-image: linear-gradient(to right, #8f2847, #aa395c, #8f2847) !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+}
+
+/* High-Contrast Light Mode Typography Rules */
+/* Catch all rose & pink text classes and map them to deep readable plum tones */
+[data-theme="light"] [class*="text-rose-1"],
+[data-theme="light"] [class*="text-rose-2"],
+[data-theme="light"] [class*="text-slate-1"],
+[data-theme="light"] [class*="text-slate-2"] {
+  color: #340f21 !important;
+}
+
+[data-theme="light"] [class*="text-rose-3"] {
+  color: #581a37 !important;
+}
+
+[data-theme="light"] [class*="text-rose-4"] {
+  color: #7a224a !important;
+}
+
+[data-theme="light"] [class*="text-pink-"] {
+  color: #3b1025 !important;
+}
+
+/* Light Mode Contrast for Custom Pastels */
+[data-theme="light"] .text-\[\#f3c1cf\],
+[data-theme="light"] .text-\[\#f0afc3\],
+[data-theme="light"] .text-\[\#e898ac\],
+[data-theme="light"] .text-\[\#d9a8c6\] {
+  color: #8f2847 !important;
+}
+
+[data-theme="light"] .text-\[\#f3c99f\] {
+  color: #92400e !important;
+}
+
+[data-theme="light"] .text-\[\#9ad4b4\] {
+  color: #14532d !important; /* Deep forest emerald for maximum readability */
+}
+
+[data-theme="light"] .text-\[\#e2a76f\] {
+  color: #9a4811 !important;
+}
+
+/* Navbar Links in Light Mode */
+[data-theme="light"] nav a {
+  color: #4a182e !important;
+}
+
+[data-theme="light"] nav a:hover {
+  color: #1f0714 !important;
+  background-color: rgba(184, 74, 108, 0.12) !important;
+}
+
+[data-theme="light"] nav a.bg-rose-500\/15 {
+  color: #8f2847 !important;
+  background-color: rgba(184, 74, 108, 0.18) !important;
+  border-color: rgba(184, 74, 108, 0.35) !important;
+}
+
+/* Form inputs in Light Mode */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background-color: #ffffff !important;
+  color: #2b0e1b !important;
+  border-color: rgba(184, 74, 108, 0.32) !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #884e67 !important;
+}
+
+/* Dark Containers & Terminal Box Overrides in Light Mode */
+[data-theme="light"] .bg-\[\#160d18\]\/95,
+[data-theme="light"] .bg-\[\#160e18\]\/90,
+[data-theme="light"] .bg-\[\#1e1320\],
+[data-theme="light"] .bg-\[\#120914\],
+[data-theme="light"] .bg-\[\#180e1a\],
+[data-theme="light"] .bg-\[\#110713\],
+[data-theme="light"] .bg-\[\#130915\],
+[data-theme="light"] .bg-\[\#1a101c\]\/80,
+[data-theme="light"] .bg-\[\#1a111b\],
+[data-theme="light"] .bg-\[\#1a101b\]\/90,
+[data-theme="light"] .bg-\[\#1a101b\],
+[data-theme="light"] .bg-\[\#1b131d\]\/90,
+[data-theme="light"] .bg-\[\#1b121c\]\/90,
+[data-theme="light"] .bg-\[\#1b121c\],
+[data-theme="light"] .bg-\[\#1c121d\]\/80,
+[data-theme="light"] .bg-\[\#1c121d\]\/90,
+[data-theme="light"] .bg-\[\#1d121e\]\/80,
+[data-theme="light"] .bg-\[\#1d131e\],
+[data-theme="light"] .bg-\[\#1f1420\],
+[data-theme="light"] .bg-\[\#1a111c\],
+[data-theme="light"] .bg-\[\#1a111c\]\/90,
+[data-theme="light"] .bg-\[\#1b101c\],
+[data-theme="light"] .bg-\[\#130b15\],
+[data-theme="light"] .bg-\[\#140c15\],
+[data-theme="light"] .bg-\[\#140d16\],
+[data-theme="light"] .bg-\[\#231724\],
+[data-theme="light"] .bg-\[\#251825\],
+[data-theme="light"] .bg-\[\#251825\]\/80,
+[data-theme="light"] .bg-\[\#251825\]\/40,
+[data-theme="light"] .bg-\[\#261927\],
+[data-theme="light"] .bg-\[\#281c28\]\/80,
+[data-theme="light"] .bg-\[\#2b1b2a\],
+[data-theme="light"] .bg-\[\#2c1a2c\],
+[data-theme="light"] .bg-\[\#241723\]\/60,
+[data-theme="light"] .bg-\[\#2e1d2c\],
+[data-theme="light"] .bg-\[\#2f1f2e\],
+[data-theme="light"] .bg-\[\#321f31\],
+[data-theme="light"] .bg-\[\#342235\],
+[data-theme="light"] .bg-\[\#201420\],
+[data-theme="light"] .bg-\[\#1d121c\]\/80 {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(184, 74, 108, 0.25) !important;
+  color: #2b0e1b;
+}
+
+/* Hero Visualizer Active Tab in Light Mode */
+[data-theme="light"] .bg-\[\#2c1a2c\] {
+  background-color: rgba(244, 215, 223, 0.95) !important;
+  color: #8f2847 !important;
+  border-color: rgba(184, 74, 108, 0.45) !important;
+}
+
+/* User avatar circles in Light Mode */
+[data-theme="light"] .bg-\[\#2b1b2a\] {
+  background-color: #f7dbe3 !important;
+  color: #6a1b38 !important;
+}
+
+/* Syntax highlighted code in Light Mode */
+[data-theme="light"] pre,
+[data-theme="light"] pre code,
+[data-theme="light"] .text-emerald-400 {
+  color: #14532d !important; /* Deep forest emerald for maximum readability */
+  background-color: transparent !important;
+}
+
+/* Table styling in Light Mode */
+[data-theme="light"] thead {
+  background-color: rgba(244, 215, 223, 0.85) !important;
+  color: #5c1f3a !important;
+  border-color: rgba(184, 74, 108, 0.25) !important;
+}
+
+[data-theme="light"] thead th {
+  color: #5c1f3a !important;
+}
+
+[data-theme="light"] tbody tr {
+  border-color: rgba(184, 74, 108, 0.15) !important;
+}
+
+[data-theme="light"] tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.70) !important;
+}
+
+[data-theme="light"] td {
+  color: #2b0e1b !important;
+}
+
+/* Primary Action Buttons: Maintain crisp white text on pink/rose gradients */
+.btn-bouncy.text-white,
+.btn-bouncy.text-white *,
+[data-theme="light"] .btn-bouncy.text-white,
+[data-theme="light"] .btn-bouncy.text-white *,
+button[type="submit"],
+button[type="submit"] *,
+[data-theme="light"] button[type="submit"],
+[data-theme="light"] button[type="submit"] * {
+  color: #ffffff !important;
+}
+
