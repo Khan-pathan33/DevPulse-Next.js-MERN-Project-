@@ -35,7 +35,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "MERN",
     technologies: ["MongoDB", "Express.js", "React 19", "Node.js", "Mongoose", "Socket.io", "Tailwind CSS", "Redis"],
     githubUrl: "https://github.com/example/nexusflow-mern",
-    liveUrl: "https://nexusflow-demo.vercel.app",
+    liveUrl: "https://linear.app",
     stars: 1240,
     featured: true,
     author: {
@@ -66,7 +66,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "Next.js",
     technologies: ["Next.js 15+", "React 19", "TypeScript", "Tailwind CSS v4", "Server Actions", "PostgreSQL", "Prisma"],
     githubUrl: "https://github.com/example/auracommerce",
-    liveUrl: "https://auracommerce-demo.vercel.app",
+    liveUrl: "https://demo.vercel.store",
     stars: 2890,
     featured: true,
     author: {
@@ -97,7 +97,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "MERN",
     technologies: ["MongoDB TimeSeries", "Express", "React", "Node.js", "WebSockets", "Chart.js", "Ethers.js"],
     githubUrl: "https://github.com/example/cryptopulse",
-    liveUrl: "https://cryptopulse-demo.vercel.app",
+    liveUrl: "https://www.coingecko.com",
     stars: 940,
     featured: false,
     author: {
@@ -128,7 +128,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "AI",
     technologies: ["Next.js", "OpenAI API", "Pinecone", "LangChain", "Tailwind CSS", "TypeScript", "React Markdown"],
     githubUrl: "https://github.com/example/neurodoc-ai",
-    liveUrl: "https://neurodoc-preview.vercel.app",
+    liveUrl: "https://sdk.vercel.ai",
     stars: 3410,
     featured: true,
     author: {
@@ -159,7 +159,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "FullStack",
     technologies: ["Node.js", "Next.js", "Docker", "Kubernetes API", "MongoDB", "Tailwind CSS", "WebRTC"],
     githubUrl: "https://github.com/example/cloudmatrix",
-    liveUrl: "https://cloudmatrix-hub.vercel.app",
+    liveUrl: "https://play.grafana.org",
     stars: 1560,
     featured: false,
     author: {
@@ -190,7 +190,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     stack: "MERN",
     technologies: ["MongoDB", "Express", "React", "Node.js", "Socket.io", "Lucide React", "Redis"],
     githubUrl: "https://github.com/example/pulsesync",
-    liveUrl: "https://pulsesync.vercel.app",
+    liveUrl: "https://dev.to",
     stars: 870,
     featured: false,
     author: {

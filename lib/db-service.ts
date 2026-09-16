@@ -226,11 +226,26 @@ export const dbService = {
       try {
         const conn = await connectToDatabase();
         if (conn) {
-          // Auto-seed empty MongoDB Atlas cluster with showcase projects
-          const totalDocs = await Project.countDocuments();
-          if (totalDocs === 0) {
-            const seedProjects = INITIAL_PROJECTS.map(({ _id, ...p }) => p);
-            await Project.insertMany(seedProjects);
+          // Auto-seed and sync showcase projects with real live URLs
+          for (const sp of INITIAL_PROJECTS) {
+            const existing = await Project.findOne({ slug: sp.slug });
+            if (!existing) {
+              const { _id, ...projectData } = sp;
+              await Project.create(projectData);
+            } else {
+              let changed = false;
+              if (existing.liveUrl !== sp.liveUrl && sp.liveUrl) {
+                existing.liveUrl = sp.liveUrl;
+                changed = true;
+              }
+              if (!existing.createdAt) {
+                existing.createdAt = new Date();
+                changed = true;
+              }
+              if (changed) {
+                await existing.save();
+              }
+            }
           }
 
           const query: any = {};

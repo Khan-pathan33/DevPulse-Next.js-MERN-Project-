@@ -5,8 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(dateString: string | Date): string {
+export function formatDate(dateString?: string | Date | null): string {
+  if (!dateString) return "Recently";
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "Recently";
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",

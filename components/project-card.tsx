@@ -120,14 +120,28 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <span>Details</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
           </Link>
-          <Link
-            href={`/projects/${project.slug}/website`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm transition-all"
-            title="See live website"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>See Website</span>
-          </Link>
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm transition-all"
+              title={`Visit ${project.title} real website`}
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>See Website</span>
+              <ExternalLink className="w-3 h-3 text-white/80" />
+            </a>
+          ) : (
+            <Link
+              href={`/projects/${project.slug}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm transition-all"
+              title="View project details"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>See Website</span>
+            </Link>
+          )}
         </div>
       </div>
     </div>

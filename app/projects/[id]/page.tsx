@@ -108,24 +108,33 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
           <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
             <UpvoteButton id={project._id} initialStars={project.stars} />
-            <Link
-              href={`/projects/${project.slug}/website`}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>See Website</span>
-            </Link>
-            {project.liveUrl && (
+            {project.liveUrl ? (
               <a
                 href={project.liveUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-rose-200 hover:text-white bg-[#261927] hover:bg-[#342235] flex items-center justify-center gap-2 transition-all border border-rose-400/20"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
               >
-                <span>Live URL</span>
+                <Globe className="w-3.5 h-3.5" />
+                <span>See Real Website</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
+            ) : (
+              <Link
+                href={`/projects/${project.slug}/website`}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>See Website</span>
+              </Link>
             )}
+            <Link
+              href={`/projects/${project.slug}/website`}
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-rose-200 hover:text-white bg-[#261927] hover:bg-[#342235] flex items-center justify-center gap-2 transition-all border border-rose-400/20"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Device Simulator</span>
+            </Link>
             <a
               href={project.githubUrl}
               target="_blank"

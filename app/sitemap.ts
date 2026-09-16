@@ -35,7 +35,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await dbService.getProjects();
     const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
       url: `${baseUrl}/projects/${p.slug}`,
-      lastModified: new Date(p.updatedAt || p.createdAt),
+      lastModified: (() => {
+        const raw = p.updatedAt || p.createdAt;
+        const d = raw ? new Date(raw) : new Date();
+        return isNaN(d.getTime()) ? new Date() : d;
+      })(),
       changeFrequency: "weekly",
       priority: 0.8,
     }));
