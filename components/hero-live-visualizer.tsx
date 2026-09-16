@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Database,
   Sparkles,
@@ -13,6 +13,8 @@ import {
   Share2,
   ShieldCheck,
   CheckCircle2,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 interface PipelineEvent {
@@ -73,19 +75,111 @@ export function HeroLiveVisualizer() {
   const [pulseCount, setPulseCount] = useState(248);
   const [isSuperPulsing, setIsSuperPulsing] = useState(false);
   const [lastActionName, setLastActionName] = useState<string>("Autonomous Stream Active");
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
-  // Cycle real-time event pipeline
+  // Lazy initialize AudioContext on user gesture
+  const getAudioContext = useCallback(() => {
+    if (typeof window === "undefined") return null;
+    if (!audioCtxRef.current) {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioCtx) {
+        audioCtxRef.current = new AudioCtx();
+      }
+    }
+    if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+    return audioCtxRef.current;
+  }, []);
+
+  // Futuristic warm harmonic synth note for throughput ticks
+  const playThroughputTone = useCallback((index: number) => {
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      // Warm C-major / A-minor pentatonic frequencies: C5, D5, E5, G5, A5, C6
+      const freqs = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5];
+      const freq = freqs[index % freqs.length];
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+      // Smooth envelope with exponential decay
+      gain.gain.setValueAtTime(0.035, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.36);
+    } catch {
+      // Graceful fallback if audio is blocked
+    }
+  }, [getAudioContext]);
+
+  // Dual-tone interactive confirmation chime
+  const playInteractChime = useCallback(() => {
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      const now = ctx.currentTime;
+      [659.25, 880.0].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        gain.gain.setValueAtTime(0.045, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.36);
+      });
+    } catch {
+      // Graceful fallback
+    }
+  }, [getAudioContext]);
+
+  const toggleSound = () => {
+    if (!soundEnabled) {
+      setSoundEnabled(true);
+      // Play instant confirmation chime upon enabling
+      setTimeout(() => {
+        playInteractChime();
+      }, 50);
+    } else {
+      setSoundEnabled(false);
+    }
+  };
+
+  // Cycle real-time event pipeline and trigger audio when enabled
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveEventIndex((prev) => (prev + 1) % LIVE_EVENTS.length);
+      setActiveEventIndex((prev) => {
+        const next = (prev + 1) % LIVE_EVENTS.length;
+        if (soundEnabled) {
+          playThroughputTone(next);
+        }
+        return next;
+      });
     }, 2800);
     return () => clearInterval(timer);
-  }, []);
+  }, [soundEnabled, playThroughputTone]);
 
   const triggerSimulation = (name: string) => {
     setIsSuperPulsing(true);
     setPulseCount((prev) => prev + 1);
     setLastActionName(name);
+    if (soundEnabled) {
+      playInteractChime();
+    }
     setTimeout(() => setIsSuperPulsing(false), 900);
   };
 
@@ -421,21 +515,50 @@ export function HeroLiveVisualizer() {
           {/* Dynamic Frequency Equalizer & Telemetry Gauges */}
           <div className="flex items-center justify-between pt-1 gap-4">
             
-            {/* Live Throughput Frequency Equalizer Bars */}
-            <div className="flex items-center gap-1">
-              {[12, 22, 14, 26, 18, 10, 24, 16, 28, 12, 20, 15].map((h, i) => (
-                <div
-                  key={i}
-                  style={{
-                    animationDelay: `${i * 0.12}s`,
-                    height: `${isSuperPulsing ? h * 1.3 : h}px`,
-                  }}
-                  className="w-1 bg-gradient-to-t from-[#c06c84] to-[#f0afc3] rounded-full animate-eq-bar transition-all duration-300"
-                />
-              ))}
-              <span className="text-[10px] text-rose-300/50 font-mono ml-2 hidden sm:inline">
-                Live Throughput
-              </span>
+            {/* Live Throughput Frequency Equalizer Bars & Sonic Audio Toggle */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={toggleSound}
+                className={`btn-bouncy flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all border cursor-pointer select-none ${
+                  soundEnabled
+                    ? "bg-rose-500/20 text-[#f0afc3] border-rose-400/60 shadow-[0_0_12px_rgba(216,130,157,0.45)]"
+                    : "bg-[#160f18] text-rose-300/60 hover:text-rose-200 border-rose-950/80 hover:border-rose-800/40"
+                }`}
+                title={soundEnabled ? "Live audio synthesizer active (Click to mute)" : "Click to enable live audio synthesizer"}
+              >
+                {soundEnabled ? (
+                  <>
+                    <Volume2 className="w-3.5 h-3.5 text-[#f0afc3] animate-pulse" />
+                    <span>SOUND ON</span>
+                  </>
+                ) : (
+                  <>
+                    <VolumeX className="w-3.5 h-3.5 opacity-60" />
+                    <span>SOUND OFF</span>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center gap-1">
+                {[12, 22, 14, 26, 18, 10, 24, 16, 28, 12, 20, 15].map((h, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      animationDelay: `${i * 0.12}s`,
+                      height: `${isSuperPulsing ? h * 1.3 : h}px`,
+                    }}
+                    className={`w-1 rounded-full animate-eq-bar transition-all duration-300 ${
+                      soundEnabled
+                        ? "bg-gradient-to-t from-[#c06c84] via-[#d8829d] to-[#f0afc3] shadow-[0_0_8px_rgba(240,175,195,0.7)]"
+                        : "bg-gradient-to-t from-[#c06c84] to-[#f0afc3]"
+                    }`}
+                  />
+                ))}
+                <span className="text-[10px] text-rose-300/50 font-mono ml-1.5 hidden sm:inline">
+                  Live Throughput
+                </span>
+              </div>
             </div>
 
             {/* Quick Micro Stat Pills */}
