@@ -229,7 +229,8 @@ export const dbService = {
           // Auto-seed empty MongoDB Atlas cluster with showcase projects
           const totalDocs = await Project.countDocuments();
           if (totalDocs === 0) {
-            await Project.insertMany(INITIAL_PROJECTS);
+            const seedProjects = INITIAL_PROJECTS.map(({ _id, ...p }) => p);
+            await Project.insertMany(seedProjects);
           }
 
           const query: any = {};
@@ -352,7 +353,8 @@ export const dbService = {
         if (conn) {
           const totalReviews = await Review.countDocuments();
           if (totalReviews === 0) {
-            await Review.insertMany(INITIAL_REVIEWS);
+            const seedReviews = INITIAL_REVIEWS.map(({ _id, ...r }) => r);
+            await Review.insertMany(seedReviews);
           }
           const reviews = await Review.find({ projectId }).sort({ createdAt: -1 }).lean();
           if (reviews.length > 0) return JSON.parse(JSON.stringify(reviews));
@@ -387,7 +389,8 @@ export const dbService = {
         if (conn) {
           const totalUsers = await User.countDocuments();
           if (totalUsers === 0) {
-            await User.insertMany(INITIAL_USERS);
+            const seedUsers = INITIAL_USERS.map(({ _id, ...u }) => u);
+            await User.insertMany(seedUsers);
           }
           const users = await User.find().sort({ createdAt: -1 }).lean();
           if (users.length > 0) return JSON.parse(JSON.stringify(users));
@@ -406,7 +409,8 @@ export const dbService = {
         if (conn) {
           const totalUsers = await User.countDocuments();
           if (totalUsers === 0) {
-            await User.insertMany(INITIAL_USERS);
+            const seedUsers = INITIAL_USERS.map(({ _id, ...u }) => u);
+            await User.insertMany(seedUsers);
           }
           const user = await User.findOne({ email: email.toLowerCase() }).lean();
           if (user) return JSON.parse(JSON.stringify(user));
@@ -489,7 +493,8 @@ export const dbService = {
         if (conn) {
           const totalLogs = await AuditLog.countDocuments();
           if (totalLogs === 0) {
-            await AuditLog.insertMany(INITIAL_AUDIT_LOGS);
+            const seedLogs = INITIAL_AUDIT_LOGS.map(({ _id, ...l }) => l);
+            await AuditLog.insertMany(seedLogs);
           }
           const logs = await AuditLog.find().sort({ createdAt: -1 }).limit(50).lean();
           if (logs.length > 0) return JSON.parse(JSON.stringify(logs));
