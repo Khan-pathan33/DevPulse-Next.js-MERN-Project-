@@ -1,12 +1,25 @@
+import mongoose from "mongoose";
 import { connectToDatabase, isMongoConfigured } from "./mongodb";
 import { Project, IProject } from "../models/Project";
 import { Review, IReview } from "../models/Review";
-import { INITIAL_PROJECTS, INITIAL_REVIEWS, ProjectData } from "./seed-data";
+import { User, IUser } from "../models/User";
+import { AuditLog, IAuditLog } from "../models/AuditLog";
+import {
+  INITIAL_PROJECTS,
+  INITIAL_REVIEWS,
+  INITIAL_USERS,
+  INITIAL_AUDIT_LOGS,
+  ProjectData,
+  UserData,
+  AuditLogData,
+} from "./seed-data";
 
 // In-memory mutable repository fallback
 class InMemoryDatabase {
   private projects: ProjectData[] = [...INITIAL_PROJECTS];
   private reviews: typeof INITIAL_REVIEWS = [...INITIAL_REVIEWS];
+  private users: UserData[] = [...INITIAL_USERS];
+  private auditLogs: AuditLogData[] = [...INITIAL_AUDIT_LOGS];
 
   async getProjects(filter?: { stack?: string; search?: string; featured?: boolean }): Promise<ProjectData[]> {
     let result = [...this.projects];
@@ -88,6 +101,13 @@ class InMemoryDatabase {
     return this.projects.length < initialLen;
   }
 
+  async toggleProjectFeatured(idOrSlug: string): Promise<ProjectData | null> {
+    const idx = this.projects.findIndex((p) => p._id === idOrSlug || p.slug === idOrSlug);
+    if (idx === -1) return null;
+    this.projects[idx].featured = !this.projects[idx].featured;
+    return { ...this.projects[idx] };
+  }
+
   async getReviews(projectId: string) {
     return this.reviews.filter((r) => r.projectId === projectId);
   }
@@ -102,10 +122,72 @@ class InMemoryDatabase {
     return review;
   }
 
+  // User methods
+  async getUsers(): Promise<UserData[]> {
+    return [...this.users];
+  }
+
+  async getUserByEmail(email: string): Promise<UserData | null> {
+    const user = this.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    return user ? { ...user } : null;
+  }
+
+  async getUserById(id: string): Promise<UserData | null> {
+    const user = this.users.find((u) => u._id === id);
+    return user ? { ...user } : null;
+  }
+
+  async createUser(data: Partial<UserData>): Promise<UserData> {
+    const newUser: UserData = {
+      _id: `user-${Date.now()}`,
+      name: data.name || "Developer",
+      email: (data.email || "").toLowerCase(),
+      passwordHash: data.passwordHash || "",
+      salt: data.salt || "",
+      role: data.role || "user",
+      avatar:
+        data.avatar ||
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      bio: data.bio || "Full-Stack Developer passionate about Next.js & MERN.",
+      createdAt: new Date().toISOString(),
+    };
+    this.users.unshift(newUser);
+    return newUser;
+  }
+
+  async updateUserRole(userId: string, role: "user" | "admin"): Promise<UserData | null> {
+    const idx = this.users.findIndex((u) => u._id === userId);
+    if (idx === -1) return null;
+    this.users[idx].role = role;
+    return { ...this.users[idx] };
+  }
+
+  async deleteUser(userId: string): Promise<boolean> {
+    const initialLen = this.users.length;
+    this.users = this.users.filter((u) => u._id !== userId);
+    return this.users.length < initialLen;
+  }
+
+  // Audit Logs
+  async getAuditLogs(): Promise<AuditLogData[]> {
+    return [...this.auditLogs];
+  }
+
+  async addAuditLog(entry: Omit<AuditLogData, "_id" | "createdAt">): Promise<AuditLogData> {
+    const log: AuditLogData = {
+      _id: `log-${Date.now()}`,
+      ...entry,
+      createdAt: new Date().toISOString(),
+    };
+    this.auditLogs.unshift(log);
+    return log;
+  }
+
   async getStats() {
     const totalProjects = this.projects.length;
     const totalStars = this.projects.reduce((acc, p) => acc + p.stars, 0);
     const totalViews = this.projects.reduce((acc, p) => acc + p.metrics.views, 0);
+    const totalUsers = this.users.length;
 
     const stackCounts = this.projects.reduce((acc: Record<string, number>, p) => {
       acc[p.stack] = (acc[p.stack] || 0) + 1;
@@ -116,6 +198,7 @@ class InMemoryDatabase {
       totalProjects,
       totalStars,
       totalViews,
+      totalUsers,
       stackCounts,
       isMongoLive: false,
     };
@@ -129,6 +212,13 @@ declare global {
 }
 
 const memoryDb = global.devPulseInMemoryDb || (global.devPulseInMemoryDb = new InMemoryDatabase());
+
+function getProjectQuery(idOrSlug: string) {
+  if (mongoose.Types.ObjectId.isValid(idOrSlug) && idOrSlug.length === 24) {
+    return { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] };
+  }
+  return { slug: idOrSlug };
+}
 
 export const dbService = {
   async getProjects(filter?: { stack?: string; search?: string; featured?: boolean }): Promise<ProjectData[]> {
@@ -169,9 +259,7 @@ export const dbService = {
       try {
         const conn = await connectToDatabase();
         if (conn) {
-          const doc = await Project.findOne({
-            $or: [{ _id: idOrSlug }, { slug: idOrSlug }],
-          }).lean();
+          const doc = await Project.findOne(getProjectQuery(idOrSlug)).lean();
           if (doc) return JSON.parse(JSON.stringify(doc));
         }
       } catch (err) {
@@ -210,7 +298,7 @@ export const dbService = {
         const conn = await connectToDatabase();
         if (conn) {
           const updated = await Project.findOneAndUpdate(
-            { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] },
+            getProjectQuery(idOrSlug),
             { $inc: { stars: 1, "metrics.likes": 1 } },
             { new: true }
           ).lean();
@@ -228,9 +316,7 @@ export const dbService = {
       try {
         const conn = await connectToDatabase();
         if (conn) {
-          const res = await Project.deleteOne({
-            $or: [{ _id: idOrSlug }, { slug: idOrSlug }],
-          });
+          const res = await Project.deleteOne(getProjectQuery(idOrSlug));
           if (res.deletedCount && res.deletedCount > 0) return true;
         }
       } catch (err) {
@@ -238,6 +324,25 @@ export const dbService = {
       }
     }
     return memoryDb.deleteProject(idOrSlug);
+  },
+
+  async toggleProjectFeatured(idOrSlug: string): Promise<ProjectData | null> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const project = await Project.findOne(getProjectQuery(idOrSlug));
+          if (project) {
+            project.featured = !project.featured;
+            await project.save();
+            return JSON.parse(JSON.stringify(project));
+          }
+        }
+      } catch (err) {
+        console.warn("MongoDB toggleFeatured failed:", err);
+      }
+    }
+    return memoryDb.toggleProjectFeatured(idOrSlug);
   },
 
   async getReviews(projectId: string) {
@@ -274,9 +379,167 @@ export const dbService = {
     return memoryDb.addReview(data);
   },
 
+  // User Management
+  async getUsers(): Promise<UserData[]> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const totalUsers = await User.countDocuments();
+          if (totalUsers === 0) {
+            await User.insertMany(INITIAL_USERS);
+          }
+          const users = await User.find().sort({ createdAt: -1 }).lean();
+          if (users.length > 0) return JSON.parse(JSON.stringify(users));
+        }
+      } catch (err) {
+        console.warn("MongoDB getUsers failed:", err);
+      }
+    }
+    return memoryDb.getUsers();
+  },
+
+  async getUserByEmail(email: string): Promise<UserData | null> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const totalUsers = await User.countDocuments();
+          if (totalUsers === 0) {
+            await User.insertMany(INITIAL_USERS);
+          }
+          const user = await User.findOne({ email: email.toLowerCase() }).lean();
+          if (user) return JSON.parse(JSON.stringify(user));
+        }
+      } catch (err) {
+        console.warn("MongoDB getUserByEmail failed:", err);
+      }
+    }
+    return memoryDb.getUserByEmail(email);
+  },
+
+  async getUserById(id: string): Promise<UserData | null> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const user = await User.findById(id).lean();
+          if (user) return JSON.parse(JSON.stringify(user));
+        }
+      } catch (err) {
+        console.warn("MongoDB getUserById failed:", err);
+      }
+    }
+    return memoryDb.getUserById(id);
+  },
+
+  async createUser(data: Partial<UserData>): Promise<UserData> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const created = await User.create({
+            ...data,
+            email: (data.email || "").toLowerCase(),
+          });
+          return JSON.parse(JSON.stringify(created));
+        }
+      } catch (err) {
+        console.warn("MongoDB createUser failed:", err);
+      }
+    }
+    return memoryDb.createUser(data);
+  },
+
+  async updateUserRole(userId: string, role: "user" | "admin"): Promise<UserData | null> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const updated = await User.findByIdAndUpdate(userId, { role }, { new: true }).lean();
+          if (updated) return JSON.parse(JSON.stringify(updated));
+        }
+      } catch (err) {
+        console.warn("MongoDB updateUserRole failed:", err);
+      }
+    }
+    return memoryDb.updateUserRole(userId, role);
+  },
+
+  async deleteUser(userId: string): Promise<boolean> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const res = await User.findByIdAndDelete(userId);
+          if (res) return true;
+        }
+      } catch (err) {
+        console.warn("MongoDB deleteUser failed:", err);
+      }
+    }
+    return memoryDb.deleteUser(userId);
+  },
+
+  // Audit Logs
+  async getAuditLogs(): Promise<AuditLogData[]> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const totalLogs = await AuditLog.countDocuments();
+          if (totalLogs === 0) {
+            await AuditLog.insertMany(INITIAL_AUDIT_LOGS);
+          }
+          const logs = await AuditLog.find().sort({ createdAt: -1 }).limit(50).lean();
+          if (logs.length > 0) return JSON.parse(JSON.stringify(logs));
+        }
+      } catch (err) {
+        console.warn("MongoDB getAuditLogs failed:", err);
+      }
+    }
+    return memoryDb.getAuditLogs();
+  },
+
+  async addAuditLog(entry: Omit<AuditLogData, "_id" | "createdAt">): Promise<AuditLogData> {
+    if (isMongoConfigured()) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const created = await AuditLog.create(entry);
+          return JSON.parse(JSON.stringify(created));
+        }
+      } catch (err) {
+        console.warn("MongoDB addAuditLog failed:", err);
+      }
+    }
+    return memoryDb.addAuditLog(entry);
+  },
+
   async getStats() {
     const isLive = isMongoConfigured();
     const memStats = await memoryDb.getStats();
+
+    if (isLive) {
+      try {
+        const conn = await connectToDatabase();
+        if (conn) {
+          const [totalProjects, totalUsers] = await Promise.all([
+            Project.countDocuments(),
+            User.countDocuments(),
+          ]);
+          return {
+            ...memStats,
+            totalProjects: totalProjects || memStats.totalProjects,
+            totalUsers: totalUsers || memStats.totalUsers,
+            isMongoLive: true,
+          };
+        }
+      } catch (e) {
+        // Fall through
+      }
+    }
+
     return {
       ...memStats,
       isMongoLive: isLive,

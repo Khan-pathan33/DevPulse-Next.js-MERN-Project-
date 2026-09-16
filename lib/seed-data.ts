@@ -243,3 +243,100 @@ export const INITIAL_REVIEWS = [
     createdAt: "2026-02-20T08:15:00.000Z",
   }
 ];
+
+export interface UserData {
+  _id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  salt: string;
+  role: "user" | "admin";
+  avatar: string;
+  bio: string;
+  createdAt: string;
+}
+
+export const INITIAL_USERS: UserData[] = [
+  {
+    _id: "user-admin-1",
+    name: "Nafisa Khanam (Admin)",
+    email: "admin@devpulse.io",
+    passwordHash: "2f0961f785909a954c3be6dcdaa6c6024c5011fc12ac3a48304c097f0519ece2536089007ace5c4d2271b592d8ec43209596e5f98d2160985d5194e5dbed02d1",
+    salt: "devpulse_salt_2026",
+    role: "admin",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+    bio: "Lead System Architect & DevPulse Platform Administrator.",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  },
+  {
+    _id: "user-dev-1",
+    name: "Alex Rivera",
+    email: "user@devpulse.io",
+    passwordHash: "eab36a112cc349267351468f8eeb0c6a2c14a9f4f1643a503ae13aae519a74023743de4012f74a948e09ba0ed802791cfecf5d7d5caa3fc1a340b68a3a94bab7",
+    salt: "devpulse_salt_2026",
+    role: "user",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+    bio: "Senior Full Stack Engineer building high-throughput MERN applications.",
+    createdAt: "2026-01-10T12:00:00.000Z",
+  },
+  {
+    _id: "user-dev-2",
+    name: "Sarah Chen",
+    email: "sarah@devpulse.io",
+    passwordHash: "eab36a112cc349267351468f8eeb0c6a2c14a9f4f1643a503ae13aae519a74023743de4012f74a948e09ba0ed802791cfecf5d7d5caa3fc1a340b68a3a94bab7",
+    salt: "devpulse_salt_2026",
+    role: "user",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
+    bio: "React 19 Specialist & Next.js Performance Optimizer.",
+    createdAt: "2026-02-05T09:30:00.000Z",
+  }
+];
+
+export interface AuditLogData {
+  _id: string;
+  action: string;
+  actor: string;
+  details: string;
+  target?: string;
+  type: "user" | "project" | "system" | "security";
+  createdAt: string;
+}
+
+export const INITIAL_AUDIT_LOGS: AuditLogData[] = [
+  {
+    _id: "log-1",
+    action: "System Initialization",
+    actor: "System Engine",
+    details: "DevPulse dual-mode architecture initialized with Next.js 16 and React 19.",
+    type: "system",
+    createdAt: "2026-03-01T08:00:00.000Z",
+  },
+  {
+    _id: "log-2",
+    action: "Staff Role Assigned",
+    actor: "SuperAdmin",
+    details: "Granted role 'admin' with global moderation privileges.",
+    target: "admin@devpulse.io",
+    type: "security",
+    createdAt: "2026-03-05T10:15:00.000Z",
+  },
+  {
+    _id: "log-3",
+    action: "Project Featured",
+    actor: "admin@devpulse.io",
+    details: "Flagged 'NexusFlow - MERN SaaS Workspace' as featured template.",
+    target: "mern-saas-nexus",
+    type: "project",
+    createdAt: "2026-03-10T14:30:00.000Z",
+  },
+  {
+    _id: "log-4",
+    action: "User Registered",
+    actor: "user@devpulse.io",
+    details: "New developer account created and verified with encrypted credentials.",
+    target: "user@devpulse.io",
+    type: "user",
+    createdAt: "2026-03-12T16:45:00.000Z",
+  }
+];
+

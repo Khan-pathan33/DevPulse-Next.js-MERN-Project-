@@ -15,6 +15,8 @@ Welcome to the comprehensive technical documentation for **DevPulse**. This docu
 7. [RESTful Route Handlers Specification](#7-restful-route-handlers-specification)
 8. [Server Actions & Optimistic State](#8-server-actions--optimistic-state)
 9. [Configuration & Getting Started](#9-configuration--getting-started)
+10. [Authentication & Role-Based Access Control (RBAC)](#10-authentication--role-based-access-control-rbac)
+11. [Admin Control Center & Governance](#11-admin-control-center--governance)
 
 ---
 
@@ -331,3 +333,49 @@ UI automatically re-renders with fresh data (Zero page reload)
    npm run build
    npm run start
    ```
+
+---
+
+## 10. Authentication & Role-Based Access Control (RBAC)
+
+DevPulse features a complete, cryptographic authentication subsystem engineered using native Node.js cryptography and Next.js Server Actions.
+
+### Cryptographic Security Architecture:
+- **Password Storage**: Uses Node.js `crypto.pbkdf2Sync` with SHA-512, individual 16-byte random salts per user, and 1,000 iterations.
+- **Session Tokens**: Signed JSON Web Tokens containing user metadata (`id`, `name`, `email`, `role`, `avatar`, `exp`) sealed with HMAC-SHA256 signatures via `SESSION_SECRET`.
+- **HTTP-Only Cookies**: Set with `httpOnly: true`, `sameSite: "lax"`, `secure: production`, and 7-day expiration. Prevents client-side XSS cookie theft.
+- **Timing Attack Resistance**: Employs `crypto.timingSafeEqual` during password verification to prevent timing-based side-channel attacks.
+
+### Pre-Seeded Demo Accounts:
+| Role | Email | Password | Access Rights |
+| :--- | :--- | :--- | :--- |
+| **Staff Admin** | `admin@devpulse.io` | `admin123` | Full access to `/admin`, User management, Role toggling, Moderation, Audit log |
+| **Developer** | `user@devpulse.io` | `user123` | Creator Dashboard (`/dashboard`), Project submissions, Upvoting |
+
+> [!TIP]
+> Both demo accounts can be authenticated instantly with **One-Click Quick Sign-In** on the `/login` page without typing credentials manually.
+
+---
+
+## 11. Admin Control Center & Governance
+
+The Admin Console (`/admin`) provides full visibility and control over the platform ecosystem.
+
+### Key Capabilities:
+1. **Real-Time Telemetry (`/admin`)**:
+   - Total registered user accounts.
+   - Showcase repository counts and featured ratio.
+   - Total star interactions and view counters.
+   - Real-time database cluster health indicator (MongoDB Atlas Live vs. In-Memory fallback).
+2. **User Management (`/admin/users`)**:
+   - Tabular directory of all registered developers and admins.
+   - Dynamic role delegation (`user` $\leftrightarrow$ `admin`) via Server Action `updateUserRoleAction`.
+   - Safe user deletion with protective locks preventing admins from deleting their own account.
+3. **Project Moderation (`/admin/projects`)**:
+   - Full repository moderation table with author attribution and tech stack tags.
+   - Instant Feature toggling (`toggleProjectFeaturedAction`) with immediate cache purge.
+   - Project removal controls.
+4. **Compliance Audit Trail (`/admin/audit`)**:
+   - Chronological ledger documenting system events, authentication attempts, role escalations, and moderation updates.
+   - Color-coded badges for event types (`security`, `user`, `project`, `system`).
+
