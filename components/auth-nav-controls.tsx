@@ -25,23 +25,13 @@ export function AuthNavControls({ user }: AuthNavControlsProps) {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2">
-        <Link
-          href="/login"
-          className="btn-bouncy-subtle flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-rose-200 hover:text-white hover:bg-rose-500/15 border border-rose-400/20 transition-all"
-        >
-          <LogIn className="w-3.5 h-3.5 text-[#d8829d]" />
-          <span>Sign In</span>
-        </Link>
-
-        <Link
-          href="/register"
-          className="btn-bouncy flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:from-[#d8829d] hover:to-[#c06c84] shadow-sm shadow-rose-900/30"
-        >
-          <UserPlus className="w-3.5 h-3.5" />
-          <span>Register</span>
-        </Link>
-      </div>
+      <Link
+        href="/login"
+        className="btn-bouncy flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:from-[#d8829d] hover:to-[#c06c84] shadow-sm shadow-rose-900/30 transition-all"
+      >
+        <LogIn className="w-3.5 h-3.5" />
+        <span>Sign In</span>
+      </Link>
     );
   }
 
