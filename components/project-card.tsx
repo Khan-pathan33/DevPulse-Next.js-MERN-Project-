@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ProjectData } from "@/lib/seed-data";
 import { UpvoteButton } from "./upvote-button";
 import { GithubIcon } from "./github-icon";
-import { ExternalLink, Eye, ArrowRight, Sparkles, Globe } from "lucide-react";
+import { ExternalLink, Eye, ArrowRight, Sparkles } from "lucide-react";
 import { formatCompactNumber } from "@/lib/utils";
 
 interface ProjectCardProps {
@@ -102,46 +102,23 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <a
             href={project.githubUrl}
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub Repository"
             className="p-1.5 rounded-lg text-rose-300/70 hover:text-white hover:bg-rose-500/15 transition-colors"
-            title="View Source Code"
           >
             <GithubIcon className="w-4 h-4" />
           </a>
           <Link
             href={`/projects/${project.slug}`}
-            className="flex items-center gap-1 text-xs font-semibold text-rose-200/80 hover:text-white px-2 py-1.5 rounded-lg hover:bg-rose-500/10 transition-colors group/btn"
+            className="flex items-center gap-1 text-xs font-semibold text-[#d8829d] hover:text-[#f3c1cf] pl-1 group/btn"
           >
             <span>Details</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
           </Link>
-          {project.liveUrl ? (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm transition-all"
-              title={`Visit ${project.title} real website`}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>See Website</span>
-              <ExternalLink className="w-3 h-3 text-white/80" />
-            </a>
-          ) : (
-            <Link
-              href={`/projects/${project.slug}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm transition-all"
-              title="View project details"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>See Website</span>
-            </Link>
-          )}
         </div>
       </div>
     </div>

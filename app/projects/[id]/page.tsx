@@ -3,7 +3,6 @@ import { dbService } from "@/lib/db-service";
 import { UpvoteButton } from "@/components/upvote-button";
 import { ReviewForm } from "@/components/review-form";
 import { GithubIcon } from "@/components/github-icon";
-import { WebsitePreview } from "@/components/website-preview";
 import {
   ArrowLeft,
   ExternalLink,
@@ -13,7 +12,6 @@ import {
   Sparkles,
   CheckCircle,
   MessageSquare,
-  Globe,
 } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -108,38 +106,22 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
           <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
             <UpvoteButton id={project._id} initialStars={project.stars} />
-            {project.liveUrl ? (
+            {project.liveUrl && (
               <a
                 href={project.liveUrl}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:from-[#d8829d] hover:to-[#c06c84] flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
               >
-                <Globe className="w-3.5 h-3.5" />
-                <span>See Real Website</span>
+                <span>Live Demo</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
-            ) : (
-              <Link
-                href={`/projects/${project.slug}/website`}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 flex items-center justify-center gap-2 transition-all shadow-md shadow-rose-900/30"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>See Website</span>
-              </Link>
             )}
-            <Link
-              href={`/projects/${project.slug}/website`}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-rose-200 hover:text-white bg-[#261927] hover:bg-[#342235] flex items-center justify-center gap-2 transition-all border border-rose-400/20"
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Device Simulator</span>
-            </Link>
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-rose-200 hover:text-white bg-[#261927] hover:bg-[#342235] flex items-center justify-center gap-2 transition-all border border-rose-400/20"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-rose-200 hover:text-white bg-[#261927] hover:bg-[#342235] flex items-center justify-center gap-2 transition-all border border-rose-400/20"
             >
               <GithubIcon className="w-3.5 h-3.5" />
               <span>Source Code</span>
@@ -190,29 +172,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         </div>
       </div>
 
-      {/* Live Interactive Website Showcase Section */}
-      <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-rose-900/30 space-y-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rose-900/25">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-              <Globe className="w-5 h-5 text-[#d8829d]" />
-              <span>Live Website Preview</span>
-            </h2>
-            <p className="text-xs sm:text-sm text-rose-200/70 mt-1">
-              Interact with this project's website directly or test across Desktop, Tablet, and Mobile viewports.
-            </p>
-          </div>
-          <Link
-            href={`/projects/${project.slug}/website`}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm self-start sm:self-auto"
-          >
-            <span>Full-Screen Experience</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <WebsitePreview project={project} embedded={true} />
-      </section>
 
       {/* Grid: Architecture Breakdown & Stack Details */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
