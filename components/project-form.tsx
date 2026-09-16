@@ -205,7 +205,7 @@ export function ProjectForm() {
                 id="authorName"
                 name="authorName"
                 type="text"
-                placeholder="e.g. Nafisa Khanam"
+                placeholder="e.g. Alex Rivera"
                 className="w-full px-4 py-2.5 rounded-xl bg-[#1b131d]/90 border border-rose-400/20 text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none focus:border-[#d8829d]"
               />
             </div>

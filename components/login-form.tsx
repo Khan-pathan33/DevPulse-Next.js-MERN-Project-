@@ -77,7 +77,7 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
               <ArrowRight className="w-3.5 h-3.5 text-rose-300/50 group-hover:text-[#e2a76f] group-hover:translate-x-0.5 transition-all" />
             </div>
             <div className="text-xs font-bold text-white group-hover:text-[#f3c99f] transition-colors">
-              Nafisa Khanam
+              DevPulse Admin
             </div>
             <div className="text-[10px] text-rose-300/60 font-mono">admin@devpulse.io</div>
           </button>

@@ -173,7 +173,7 @@ export async function quickDemoLoginAction(role: "admin" | "user"): Promise<void
     const fallbackUser: SessionUser = {
       id: role === "admin" ? "user-admin-1" : "user-dev-1",
       email: targetEmail,
-      name: role === "admin" ? "Nafisa Khanam (Admin)" : "Alex Rivera",
+      name: role === "admin" ? "DevPulse Admin" : "Alex Rivera",
       role: role,
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
     };

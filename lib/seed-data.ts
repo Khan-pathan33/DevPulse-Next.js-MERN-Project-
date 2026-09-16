@@ -259,7 +259,7 @@ export interface UserData {
 export const INITIAL_USERS: UserData[] = [
   {
     _id: "user-admin-1",
-    name: "Nafisa Khanam (Admin)",
+    name: "DevPulse Admin",
     email: "admin@devpulse.io",
     passwordHash: "2f0961f785909a954c3be6dcdaa6c6024c5011fc12ac3a48304c097f0519ece2536089007ace5c4d2271b592d8ec43209596e5f98d2160985d5194e5dbed02d1",
     salt: "devpulse_salt_2026",
