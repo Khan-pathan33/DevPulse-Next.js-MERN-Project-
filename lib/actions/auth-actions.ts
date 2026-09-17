@@ -27,12 +27,14 @@ export async function loginAction(
   const password = formData.get("password") as string;
   const redirectUrl = (formData.get("redirect") as string) || "/dashboard";
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const errors: Record<string, string> = {};
-  if (!email || !email.includes("@")) {
+  if (!email || !EMAIL_REGEX.test(email)) {
     errors.email = "Please provide a valid email address.";
   }
-  if (!password || password.length < 6) {
-    errors.password = "Password must be at least 6 characters.";
+  if (!password) {
+    errors.password = "Password is required.";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -89,15 +91,29 @@ export async function registerAction(
   const password = formData.get("password") as string;
   const bio = (formData.get("bio") as string)?.trim();
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const errors: Record<string, string> = {};
   if (!name || name.length < 2) {
     errors.name = "Full name must be at least 2 characters.";
   }
-  if (!email || !email.includes("@")) {
-    errors.email = "Please enter a valid email address.";
+  if (!email || !EMAIL_REGEX.test(email)) {
+    errors.email = "Please enter a valid email address (e.g. developer@example.com).";
   }
-  if (!password || password.length < 6) {
-    errors.password = "Password must be at least 6 characters.";
+
+  const passwordIssues: string[] = [];
+  if (!password || password.length < 8) {
+    passwordIssues.push("at least 8 characters");
+  }
+  if (!/[A-Z]/.test(password || "")) {
+    passwordIssues.push("at least one capital letter (A-Z)");
+  }
+  if (!/[^a-zA-Z0-9]/.test(password || "")) {
+    passwordIssues.push("at least one special character (e.g. !@#$%^&*)");
+  }
+
+  if (passwordIssues.length > 0) {
+    errors.password = `Password must contain ${passwordIssues.join(", ")}.`;
   }
 
   if (Object.keys(errors).length > 0) {
