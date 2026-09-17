@@ -90,21 +90,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <div className="absolute top-9 right-3 z-20">
           <UpvoteButton id={project._id} initialStars={project.stars} compact />
         </div>
-
-        {/* Hover Quick Overlay Action */}
-        {project.liveUrl && (
-          <div className="absolute inset-0 pt-7 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-15 pointer-events-none group-hover:pointer-events-auto">
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3.5 py-1.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-xl shadow-rose-950/70 flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 cursor-pointer"
-            >
-              <span>Visit Live Website</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        )}
       </div>
 
       {/* 2. Card Content & Meta */}

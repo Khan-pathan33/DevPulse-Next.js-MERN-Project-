@@ -132,6 +132,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["React", "Node.js", "Express", "MongoDB", "OpenAI", "Anthropic Claude", "Docker", "Tailwind CSS"],
     githubUrl: "https://github.com/danny-avila/LibreChat",
     liveUrl: "https://librechat.ai",
+    image: "/projects/librechat.png",
     stars: 24300,
     featured: true,
     author: {
@@ -500,6 +501,9 @@ export const INITIAL_AUDIT_LOGS: AuditLogData[] = [
 export function getProjectFallbackImage(stack?: string, slug?: string): string {
   if (slug?.includes("habitica")) {
     return "/projects/habitica.png";
+  }
+  if (slug?.includes("librechat")) {
+    return "/projects/librechat.png";
   }
   if (slug?.includes("excalidraw")) {
     return "https://excalidraw.com/og-image-2.png";
