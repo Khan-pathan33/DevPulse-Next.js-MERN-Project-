@@ -226,7 +226,15 @@ export const dbService = {
       try {
         const conn = await connectToDatabase();
         if (conn) {
-          // Auto-seed and sync showcase projects with real live URLs
+          // Clean up legacy dummy projects with example GitHub URLs
+          await Project.deleteMany({
+            $or: [
+              { githubUrl: { $regex: "example" } },
+              { slug: { $in: ["nexusflow-mern-saas", "auracommerce-nextjs", "cryptopulse-mern-defi", "neurodoc-nextjs-ai", "cloudmatrix-devops-portal", "pulsesync-mern-community", "taxonomy-nextjs-app"] } }
+            ]
+          });
+
+          // Auto-seed and sync showcase projects with real live and github URLs
           for (const sp of INITIAL_PROJECTS) {
             const existing = await Project.findOne({ slug: sp.slug });
             if (!existing) {
@@ -236,6 +244,14 @@ export const dbService = {
               let changed = false;
               if (existing.liveUrl !== sp.liveUrl && sp.liveUrl) {
                 existing.liveUrl = sp.liveUrl;
+                changed = true;
+              }
+              if (existing.githubUrl !== sp.githubUrl && sp.githubUrl) {
+                existing.githubUrl = sp.githubUrl;
+                changed = true;
+              }
+              if (existing.title !== sp.title && sp.title) {
+                existing.title = sp.title;
                 changed = true;
               }
               if (!existing.createdAt) {

@@ -36,8 +36,8 @@ const PRESET_ENDPOINTS: Endpoint[] = [
         description: "Vector similarity search with MongoDB Atlas Vector Search and Express stream handlers.",
         stack: "AI",
         technologies: ["MongoDB Atlas", "Express", "React 19", "Node.js", "OpenAI"],
-        githubUrl: "https://github.com/example/omnisearch-ai",
-        liveUrl: "https://omnisearch.dev",
+        githubUrl: "https://github.com/danny-avila/LibreChat",
+        liveUrl: "https://librechat.ai",
       },
       null,
       2

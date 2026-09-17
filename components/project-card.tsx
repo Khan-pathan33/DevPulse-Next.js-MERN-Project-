@@ -102,19 +102,34 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Live Demo for ${project.title}`}
+              title="Open Live Demo"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:brightness-110 shadow-sm shadow-rose-950/40 transition-all shrink-0"
+            >
+              <span>Demo</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
           <a
             href={project.githubUrl}
             target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub Repository"
-            className="p-1.5 rounded-lg text-rose-300/70 hover:text-white hover:bg-rose-500/15 transition-colors"
+            rel="noopener noreferrer"
+            aria-label={`Source Code for ${project.title}`}
+            title="View Source Code on GitHub"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-rose-200/90 hover:text-white bg-[#261927] hover:bg-[#382136] border border-rose-400/20 transition-all shrink-0"
           >
-            <GithubIcon className="w-4 h-4" />
+            <GithubIcon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Code</span>
           </a>
           <Link
             href={`/projects/${project.slug}`}
-            className="flex items-center gap-1 text-xs font-semibold text-[#d8829d] hover:text-[#f3c1cf] pl-1 group/btn"
+            className="flex items-center gap-1 text-xs font-semibold text-[#d8829d] hover:text-[#f3c1cf] pl-1 group/btn shrink-0"
           >
             <span>Details</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
