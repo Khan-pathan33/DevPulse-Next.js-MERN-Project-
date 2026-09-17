@@ -221,13 +221,8 @@ class InMemoryDatabase {
   }
 }
 
-// Global in-memory singleton to persist across dev reloads
-declare global {
-  // eslint-disable-next-line no-var
-  var devPulseInMemoryDb: InMemoryDatabase | undefined;
-}
-
-const memoryDb = global.devPulseInMemoryDb || (global.devPulseInMemoryDb = new InMemoryDatabase());
+// In-memory fallback instance
+const memoryDb = new InMemoryDatabase();
 
 function getProjectQuery(idOrSlug: string) {
   if (mongoose.Types.ObjectId.isValid(idOrSlug) && idOrSlug.length === 24) {
@@ -336,7 +331,7 @@ export const dbService = {
         const conn = await connectToDatabase();
         if (conn) {
           const doc = await Project.findOne(getProjectQuery(idOrSlug)).lean();
-          if (doc) return JSON.parse(JSON.stringify(doc));
+          return doc ? JSON.parse(JSON.stringify(doc)) : null;
         }
       } catch (err) {
         console.warn("MongoDB findOne failed, falling back to memory db:", err);
@@ -421,21 +416,17 @@ export const dbService = {
     return memoryDb.toggleProjectFeatured(idOrSlug);
   },
 
+  // Review Operations
   async getReviews(projectId: string) {
     if (isMongoConfigured()) {
       try {
         const conn = await connectToDatabase();
         if (conn) {
-          const totalReviews = await Review.countDocuments();
-          if (totalReviews === 0) {
-            const seedReviews = INITIAL_REVIEWS.map(({ _id, ...r }) => r);
-            await Review.insertMany(seedReviews);
-          }
-          const reviews = await Review.find({ projectId }).sort({ createdAt: -1 }).lean();
-          if (reviews.length > 0) return JSON.parse(JSON.stringify(reviews));
+          const docs = await Review.find({ projectId }).sort({ createdAt: -1 }).lean();
+          return JSON.parse(JSON.stringify(docs));
         }
       } catch (err) {
-        console.warn("MongoDB reviews lookup failed:", err);
+        console.warn("MongoDB getReviews failed:", err);
       }
     }
     return memoryDb.getReviews(projectId);
@@ -468,7 +459,7 @@ export const dbService = {
             await User.insertMany(seedUsers);
           }
           const users = await User.find().sort({ createdAt: -1 }).lean();
-          if (users.length > 0) return JSON.parse(JSON.stringify(users));
+          return JSON.parse(JSON.stringify(users));
         }
       } catch (err) {
         console.warn("MongoDB getUsers failed:", err);
@@ -488,7 +479,7 @@ export const dbService = {
             await User.insertMany(seedUsers);
           }
           const user = await User.findOne({ email: email.toLowerCase() }).lean();
-          if (user) return JSON.parse(JSON.stringify(user));
+          return user ? JSON.parse(JSON.stringify(user)) : null;
         }
       } catch (err) {
         console.warn("MongoDB getUserByEmail failed:", err);
@@ -503,7 +494,7 @@ export const dbService = {
         const conn = await connectToDatabase();
         if (conn) {
           const user = await User.findById(id).lean();
-          if (user) return JSON.parse(JSON.stringify(user));
+          return user ? JSON.parse(JSON.stringify(user)) : null;
         }
       } catch (err) {
         console.warn("MongoDB getUserById failed:", err);
