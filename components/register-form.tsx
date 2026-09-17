@@ -121,7 +121,13 @@ export function RegisterForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-4 pr-11 py-2.5 rounded-xl bg-[#1b131d]/90 border border-rose-400/20 text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none focus:border-[#d8829d] transition-all"
+              className={`w-full pl-4 pr-11 py-2.5 rounded-xl bg-[#1b131d]/90 border text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none transition-all ${
+                isPasswordValid
+                  ? "border-emerald-500/40 focus:border-emerald-400"
+                  : password.length > 0
+                  ? "border-rose-400/40 focus:border-rose-400"
+                  : "border-rose-400/20 focus:border-[#d8829d]"
+              }`}
             />
             <button
               type="button"
@@ -138,52 +144,54 @@ export function RegisterForm() {
             <p className="text-xs text-rose-400 mt-1">{state.errors.password}</p>
           )}
 
-          {/* Password Validation Requirements Checklist */}
-          <div className="mt-2.5 p-3 rounded-xl bg-[#160f18]/80 border border-rose-900/30 space-y-1.5 text-xs">
-            <div className="text-[11px] font-semibold text-rose-300/80 mb-1">
-              Password Requirements:
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-              <div
-                className={`flex items-center gap-1.5 text-[11px] transition-colors ${
-                  hasMinLength ? "text-emerald-300 font-medium" : "text-rose-300/50"
-                }`}
-              >
-                {hasMinLength ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                ) : (
-                  <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
-                )}
-                <span>8+ Characters</span>
+          {/* Password Validation Requirements Checklist - Disappears once password requirements are filled */}
+          {!isPasswordValid && (
+            <div className="mt-2.5 p-3 rounded-xl bg-[#160f18]/80 border border-rose-900/30 space-y-1.5 text-xs transition-all">
+              <div className="text-[11px] font-semibold text-rose-300/80 mb-1">
+                Password Requirements:
               </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                <div
+                  className={`flex items-center gap-1.5 text-[11px] transition-colors ${
+                    hasMinLength ? "text-emerald-300 font-medium" : "text-rose-300/50"
+                  }`}
+                >
+                  {hasMinLength ? (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
+                  )}
+                  <span>8+ Characters</span>
+                </div>
 
-              <div
-                className={`flex items-center gap-1.5 text-[11px] transition-colors ${
-                  hasCapital ? "text-emerald-300 font-medium" : "text-rose-300/50"
-                }`}
-              >
-                {hasCapital ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                ) : (
-                  <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
-                )}
-                <span>1+ Capital (A-Z)</span>
-              </div>
+                <div
+                  className={`flex items-center gap-1.5 text-[11px] transition-colors ${
+                    hasCapital ? "text-emerald-300 font-medium" : "text-rose-300/50"
+                  }`}
+                >
+                  {hasCapital ? (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
+                  )}
+                  <span>1+ Capital (A-Z)</span>
+                </div>
 
-              <div
-                className={`flex items-center gap-1.5 text-[11px] transition-colors ${
-                  hasSpecial ? "text-emerald-300 font-medium" : "text-rose-300/50"
-                }`}
-              >
-                {hasSpecial ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                ) : (
-                  <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
-                )}
-                <span>1+ Special (!@#)</span>
+                <div
+                  className={`flex items-center gap-1.5 text-[11px] transition-colors ${
+                    hasSpecial ? "text-emerald-300 font-medium" : "text-rose-300/50"
+                  }`}
+                >
+                  {hasSpecial ? (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Circle className="w-3.5 h-3.5 text-rose-400/40 shrink-0" />
+                  )}
+                  <span>1+ Special (!@#)</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Developer Bio */}
