@@ -14,6 +14,7 @@ import {
   Sparkles,
   LogIn,
   UserPlus,
+  FolderGit2,
 } from "lucide-react";
 
 interface AuthNavControlsProps {
@@ -111,6 +112,15 @@ export function AuthNavControls({ user }: AuthNavControlsProps) {
                   <span>Admin Control Center</span>
                 </Link>
               )}
+
+              <Link
+                href="/my-projects"
+                onClick={() => setDropdownOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-100 hover:bg-rose-500/15 transition-colors"
+              >
+                <FolderGit2 className="w-3.5 h-3.5 text-[#f3c1cf]" />
+                <span>My Projects</span>
+              </Link>
 
               <Link
                 href="/dashboard"

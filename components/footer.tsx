@@ -71,6 +71,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/my-projects" className="hover:text-[#c06c84] transition-colors font-semibold text-rose-200">
+                  My Projects
+                </Link>
+              </li>
+              <li>
                 <Link href="/dashboard" className="hover:text-[#c06c84] transition-colors">
                   Creator Dashboard
                 </Link>

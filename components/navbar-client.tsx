@@ -19,6 +19,7 @@ import {
   LogIn,
   UserPlus,
   LogOut,
+  FolderGit2,
 } from "lucide-react";
 
 interface NavbarClientProps {
@@ -27,6 +28,7 @@ interface NavbarClientProps {
 
 const NAV_LINKS = [
   { name: "Explore", href: "/projects", icon: Layers },
+  { name: "My Projects", href: "/my-projects", icon: FolderGit2 },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "API Docs", href: "/api-docs", icon: Terminal },
 ];

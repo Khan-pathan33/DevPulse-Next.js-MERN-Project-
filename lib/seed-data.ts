@@ -11,6 +11,8 @@ export interface ProjectData {
   stars: number;
   featured: boolean;
   author: {
+    userId?: string;
+    email?: string;
     name: string;
     avatar: string;
     role: string;

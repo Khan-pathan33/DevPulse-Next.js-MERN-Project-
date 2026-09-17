@@ -55,13 +55,22 @@ export function ProjectForm() {
             <div>
               <p className="font-semibold">{state.message}</p>
               {state.success && (
-                <button
-                  type="button"
-                  onClick={() => router.push("/projects")}
-                  className="underline mt-1 text-[#d8829d] font-bold hover:text-white cursor-pointer"
-                >
-                  View in Project Explorer →
-                </button>
+                <div className="flex flex-wrap items-center gap-3 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/my-projects")}
+                    className="underline text-[#d8829d] font-bold hover:text-white cursor-pointer"
+                  >
+                    View in My Projects →
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/projects")}
+                    className="underline text-rose-300/80 font-medium hover:text-white cursor-pointer"
+                  >
+                    Explore Catalog
+                  </button>
+                </div>
               )}
             </div>
           </div>

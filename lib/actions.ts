@@ -4,6 +4,8 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { dbService } from "./db-service";
 
+import { getCurrentUser } from "./auth";
+
 export interface ActionState {
   success?: boolean;
   message?: string;
@@ -52,6 +54,8 @@ export async function createProjectAction(
     : ["Next.js", "React", "Node.js"];
 
   try {
+    const currentUser = await getCurrentUser();
+
     const newProject = await dbService.createProject({
       title,
       description,
@@ -61,9 +65,11 @@ export async function createProjectAction(
       githubUrl,
       liveUrl: liveUrl || undefined,
       author: {
-        name: authorName || "Community Developer",
-        avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80`,
-        role: authorRole || "Full Stack Developer",
+        userId: currentUser?.id,
+        email: currentUser?.email,
+        name: authorName || currentUser?.name || "Community Developer",
+        avatar: currentUser?.avatar || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80`,
+        role: authorRole || (currentUser?.role === "admin" ? "Lead Architect" : "Full Stack Developer"),
       },
       featured: false,
       architecture: [
@@ -77,6 +83,7 @@ export async function createProjectAction(
     revalidatePath("/");
     revalidatePath("/projects");
     revalidatePath("/dashboard");
+    revalidatePath("/my-projects");
     revalidatePath("/api/projects");
 
     return {
@@ -108,6 +115,7 @@ export async function deleteProjectAction(idOrSlug: string) {
     await dbService.deleteProject(idOrSlug);
     revalidatePath("/projects");
     revalidatePath("/dashboard");
+    revalidatePath("/my-projects");
     return { success: true };
   } catch (err) {
     return { success: false, error: "Failed to delete project" };

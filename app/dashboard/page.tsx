@@ -20,13 +20,21 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <Link
-          href="/dashboard/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:from-[#d8829d] hover:to-[#c06c84] shadow-md shadow-rose-900/30 transition-all cursor-pointer"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>New Project</span>
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <Link
+            href="/my-projects"
+            className="btn-bouncy-subtle inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl font-semibold text-xs text-rose-200 bg-[#251825] hover:bg-[#342235] border border-rose-400/25 transition-all cursor-pointer"
+          >
+            <span>My Projects</span>
+          </Link>
+          <Link
+            href="/dashboard/new"
+            className="btn-bouncy inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#c06c84] to-[#d8829d] hover:from-[#d8829d] hover:to-[#c06c84] shadow-md shadow-rose-900/30 transition-all cursor-pointer"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>New Project</span>
+          </Link>
+        </div>
       </div>
 
       {/* Inventory Table */}

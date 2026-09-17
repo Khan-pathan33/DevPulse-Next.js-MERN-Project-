@@ -12,6 +12,8 @@ export interface IProject extends Document {
   stars: number;
   featured: boolean;
   author: {
+    userId?: string;
+    email?: string;
     name: string;
     avatar: string;
     role: string;
@@ -44,6 +46,8 @@ const ProjectSchema = new Schema<IProject>(
     stars: { type: Number, default: 0 },
     featured: { type: Boolean, default: false, index: true },
     author: {
+      userId: { type: String, index: true },
+      email: { type: String, index: true },
       name: { type: String, required: true },
       avatar: { type: String, default: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" },
       role: { type: String, default: "Full Stack Engineer" },

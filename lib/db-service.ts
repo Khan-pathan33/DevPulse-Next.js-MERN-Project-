@@ -21,7 +21,14 @@ class InMemoryDatabase {
   private users: UserData[] = [...INITIAL_USERS];
   private auditLogs: AuditLogData[] = [...INITIAL_AUDIT_LOGS];
 
-  async getProjects(filter?: { stack?: string; search?: string; featured?: boolean }): Promise<ProjectData[]> {
+  async getProjects(filter?: {
+    stack?: string;
+    search?: string;
+    featured?: boolean;
+    userId?: string;
+    userEmail?: string;
+    authorName?: string;
+  }): Promise<ProjectData[]> {
     let result = [...this.projects];
 
     if (filter?.stack && filter.stack !== "All") {
@@ -40,6 +47,15 @@ class InMemoryDatabase {
 
     if (filter?.featured !== undefined) {
       result = result.filter((p) => p.featured === filter.featured);
+    }
+
+    if (filter?.userId || filter?.userEmail || filter?.authorName) {
+      result = result.filter((p) => {
+        if (filter.userId && p.author.userId === filter.userId) return true;
+        if (filter.userEmail && p.author.email?.toLowerCase() === filter.userEmail.toLowerCase()) return true;
+        if (filter.authorName && p.author.name.toLowerCase() === filter.authorName.toLowerCase()) return true;
+        return false;
+      });
     }
 
     return result;
@@ -221,7 +237,14 @@ function getProjectQuery(idOrSlug: string) {
 }
 
 export const dbService = {
-  async getProjects(filter?: { stack?: string; search?: string; featured?: boolean }): Promise<ProjectData[]> {
+  async getProjects(filter?: {
+    stack?: string;
+    search?: string;
+    featured?: boolean;
+    userId?: string;
+    userEmail?: string;
+    authorName?: string;
+  }): Promise<ProjectData[]> {
     if (isMongoConfigured()) {
       try {
         const conn = await connectToDatabase();
@@ -274,16 +297,37 @@ export const dbService = {
               { technologies: { $in: [new RegExp(filter.search, "i")] } },
             ];
           }
-          const docs = await Project.find(query).sort({ createdAt: -1 }).lean();
-          if (docs.length > 0) {
-            return JSON.parse(JSON.stringify(docs));
+
+          if (filter?.userId || filter?.userEmail || filter?.authorName) {
+            const authorOr: any[] = [];
+            if (filter.userId) authorOr.push({ "author.userId": filter.userId });
+            if (filter.userEmail) authorOr.push({ "author.email": filter.userEmail.toLowerCase() });
+            if (filter.authorName) authorOr.push({ "author.name": new RegExp(`^${filter.authorName}$`, "i") });
+
+            if (query.$or) {
+              query.$and = [{ $or: query.$or }, { $or: authorOr }];
+              delete query.$or;
+            } else {
+              query.$or = authorOr;
+            }
           }
+
+          const docs = await Project.find(query).sort({ createdAt: -1 }).lean();
+          return JSON.parse(JSON.stringify(docs));
         }
       } catch (err) {
         console.warn("MongoDB query failed, using resilient fallback:", err);
       }
     }
     return memoryDb.getProjects(filter);
+  },
+
+  async getUserProjects(user: { id: string; email?: string; name?: string }): Promise<ProjectData[]> {
+    return this.getProjects({
+      userId: user.id,
+      userEmail: user.email,
+      authorName: user.name,
+    });
   },
 
   async getProjectByIdOrSlug(idOrSlug: string): Promise<ProjectData | null> {
