@@ -70,6 +70,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js 15+", "React 19", "TypeScript", "Tailwind CSS", "Postgres", "Drizzle ORM", "Stripe", "Auth.js"],
     githubUrl: "https://github.com/leerob/next-saas-starter",
     liveUrl: "https://next-saas-starter-ashy.vercel.app",
+    image: "/projects/saas-starter.png",
     stars: 12800,
     featured: true,
     author: {
@@ -504,6 +505,9 @@ export function getProjectFallbackImage(stack?: string, slug?: string): string {
   }
   if (slug?.includes("librechat")) {
     return "/projects/librechat.png";
+  }
+  if (slug?.includes("saas")) {
+    return "/projects/saas-starter.png";
   }
   if (slug?.includes("excalidraw")) {
     return "https://excalidraw.com/og-image-2.png";
