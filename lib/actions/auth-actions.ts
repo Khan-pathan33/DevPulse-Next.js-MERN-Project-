@@ -10,6 +10,7 @@ import {
   createSessionCookie,
   clearSessionCookie,
   getCurrentUser,
+  getAdminCredentials,
   SessionUser,
 } from "../auth";
 
@@ -41,22 +42,55 @@ export async function loginAction(
     return { success: false, message: "Invalid credentials.", errors };
   }
 
-  const user = await dbService.getUserByEmail(email);
-  if (!user) {
-    return {
-      success: false,
-      message: "No account found with this email address.",
-      errors: { email: "Account does not exist." },
-    };
-  }
+  const adminCreds = getAdminCredentials();
+  const isAdminEmail = email === adminCreds.email;
 
-  const isValid = verifyPassword(password, user.salt, user.passwordHash);
-  if (!isValid) {
-    return {
-      success: false,
-      message: "Incorrect password. Please try again.",
-      errors: { password: "Password does not match." },
-    };
+  let user = await dbService.getUserByEmail(email);
+
+  if (isAdminEmail && adminCreds.password) {
+    // Enforce environment-configured admin credentials
+    if (password !== adminCreds.password) {
+      return {
+        success: false,
+        message: "Incorrect password. Please try again.",
+        errors: { password: "Password does not match." },
+      };
+    }
+
+    // Ensure admin user exists in DB and has admin role
+    if (!user) {
+      const salt = generateSalt();
+      const passwordHash = hashPassword(password, salt);
+      user = await dbService.createUser({
+        name: "DevPulse Admin",
+        email: adminCreds.email,
+        passwordHash,
+        salt,
+        role: "admin",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        bio: "Platform Lead Administrator.",
+      });
+    } else if (user.role !== "admin") {
+      const updated = await dbService.updateUserRole(user._id, "admin");
+      if (updated) user = updated;
+    }
+  } else {
+    if (!user) {
+      return {
+        success: false,
+        message: "No account found with this email address.",
+        errors: { email: "Account does not exist." },
+      };
+    }
+
+    const isValid = verifyPassword(password, user.salt, user.passwordHash);
+    if (!isValid) {
+      return {
+        success: false,
+        message: "Incorrect password. Please try again.",
+        errors: { password: "Password does not match." },
+      };
+    }
   }
 
   // Create signed session cookie
@@ -179,18 +213,23 @@ export async function logoutAction(): Promise<void> {
   redirect("/");
 }
 
-// One-click demo login for effortless testing of User and Admin roles
+// One-click demo login for developer testing (Admin bypass strictly disabled for security)
 export async function quickDemoLoginAction(role: "admin" | "user"): Promise<void> {
-  const targetEmail = role === "admin" ? "admin@devpulse.io" : "user@devpulse.io";
+  if (role === "admin") {
+    // Admin access requires real authentication with ADMIN_EMAIL and ADMIN_PASSWORD
+    redirect("/login?error=admin_credentials_required");
+  }
+
+  const targetEmail = "user@devpulse.io";
   const user = await dbService.getUserByEmail(targetEmail);
 
   if (!user) {
     // If user somehow not found, seed fallback
     const fallbackUser: SessionUser = {
-      id: role === "admin" ? "user-admin-1" : "user-dev-1",
+      id: "user-dev-1",
       email: targetEmail,
-      name: role === "admin" ? "DevPulse Admin" : "Alex Rivera",
-      role: role,
+      name: "Alex Rivera",
+      role: "user",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
     };
     await createSessionCookie(fallbackUser);
@@ -208,16 +247,12 @@ export async function quickDemoLoginAction(role: "admin" | "user"): Promise<void
   await dbService.addAuditLog({
     action: "Demo Quick-Login",
     actor: targetEmail,
-    details: `Fast demo session initialized with role '${role}'.`,
+    details: "Fast developer demo session initialized.",
     type: "security",
   });
 
   revalidatePath("/", "layout");
-  if (role === "admin") {
-    redirect("/admin");
-  } else {
-    redirect("/dashboard");
-  }
+  redirect("/dashboard");
 }
 
 // Admin Operations

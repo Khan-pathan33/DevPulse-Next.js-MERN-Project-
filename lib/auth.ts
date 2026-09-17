@@ -13,6 +13,12 @@ export interface SessionUser {
   avatar: string;
 }
 
+export function getAdminCredentials(): { email: string; password?: string } {
+  const email = (process.env.ADMIN_EMAIL || "admin@devpulse.io").trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD || "Admin@DevPulse2026!";
+  return { email, password };
+}
+
 export function generateSalt(): string {
   return crypto.randomBytes(16).toString("hex");
 }

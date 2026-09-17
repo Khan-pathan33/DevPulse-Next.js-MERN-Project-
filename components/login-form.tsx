@@ -33,6 +33,13 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
   return (
     <div className="space-y-6">
       {/* Banner for redirect warnings */}
+      {errorMessage === "admin_credentials_required" && (
+        <div className="p-3.5 rounded-2xl bg-[#e2a76f]/15 border border-[#e2a76f]/40 text-xs text-[#f3c99f] flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#e2a76f] shrink-0" />
+          <span>Administrator access is strictly protected. Please enter the ADMIN_EMAIL and ADMIN_PASSWORD configured in .env.local.</span>
+        </div>
+      )}
+
       {errorMessage === "admin_required" && (
         <div className="p-3.5 rounded-2xl bg-[#e2a76f]/15 border border-[#e2a76f]/40 text-xs text-[#f3c99f] flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-[#e2a76f] shrink-0" />
@@ -59,28 +66,27 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
       <div className="space-y-2">
         <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-rose-300/70">
           <Zap className="w-3.5 h-3.5 text-[#d8829d]" />
-          <span>One-Click Instant Demo Access:</span>
+          <span>Demo Access & Roles:</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Admin Demo Button */}
-          <button
-            type="button"
-            disabled={isDemoPending}
-            onClick={() => handleDemoClick("admin")}
-            className="btn-bouncy p-3.5 rounded-2xl glass-panel border border-[#e2a76f]/30 hover:border-[#e2a76f]/60 text-left transition-all cursor-pointer group shadow-sm disabled:opacity-50"
-          >
+          {/* Protected Staff Admin Info Card (Bypass Disabled for Security) */}
+          <div className="p-3.5 rounded-2xl glass-panel border border-[#e2a76f]/30 bg-[#e2a76f]/5 text-left flex flex-col justify-between select-none">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#e2a76f]/15 text-[#f3c99f] border border-[#e2a76f]/30 flex items-center gap-1">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#e2a76f]/20 text-[#f3c99f] border border-[#e2a76f]/30 flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3 text-[#e2a76f]" /> Staff Admin
               </span>
-              <ArrowRight className="w-3.5 h-3.5 text-rose-300/50 group-hover:text-[#e2a76f] group-hover:translate-x-0.5 transition-all" />
+              <span className="text-[9px] font-mono text-[#f3c99f]/70 bg-black/40 px-1.5 py-0.5 rounded border border-[#e2a76f]/20">
+                .env.local
+              </span>
             </div>
-            <div className="text-xs font-bold text-white group-hover:text-[#f3c99f] transition-colors">
-              DevPulse Admin
+            <div className="text-xs font-semibold text-white">
+              Protected by Server .env
             </div>
-            <div className="text-[10px] text-rose-300/60 font-mono">admin@devpulse.io</div>
-          </button>
+            <div className="text-[10px] text-rose-300/60 mt-0.5">
+              Sign in with credentials below
+            </div>
+          </div>
 
           {/* Regular Developer Demo Button */}
           <button
