@@ -225,6 +225,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["MongoDB", "Mongoose", "Express", "Node.js", "Vue/React", "Socket.io", "Redis", "TypeScript"],
     githubUrl: "https://github.com/HabitRPG/habitica",
     liveUrl: "https://habitica.com",
+    image: "/projects/habitica.png",
     stars: 11900,
     featured: false,
     author: {
@@ -256,6 +257,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Prisma", "Upstash Redis", "Tinybird"],
     githubUrl: "https://github.com/dubinc/dub",
     liveUrl: "https://dub.co",
+    image: "https://assets.dub.co/thumbnail.png",
     stars: 20500,
     featured: false,
     author: {
@@ -287,6 +289,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["React", "TypeScript", "Canvas API", "WebSockets", "Node.js", "WebRTC", "Rough.js"],
     githubUrl: "https://github.com/excalidraw/excalidraw",
     liveUrl: "https://excalidraw.com",
+    image: "https://excalidraw.com/og-image-2.png",
     stars: 92400,
     featured: false,
     author: {
@@ -495,6 +498,15 @@ export const INITIAL_AUDIT_LOGS: AuditLogData[] = [
 ];
 
 export function getProjectFallbackImage(stack?: string, slug?: string): string {
+  if (slug?.includes("habitica")) {
+    return "/projects/habitica.png";
+  }
+  if (slug?.includes("excalidraw")) {
+    return "https://excalidraw.com/og-image-2.png";
+  }
+  if (slug?.includes("dub")) {
+    return "https://assets.dub.co/thumbnail.png";
+  }
   if (slug?.includes("gym") || slug?.includes("exercise")) {
     return "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80";
   }
