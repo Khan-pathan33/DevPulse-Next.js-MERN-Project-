@@ -102,6 +102,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js", "AI SDK", "OpenAI", "React Server Components", "TypeScript", "Tailwind CSS", "Postgres"],
     githubUrl: "https://github.com/vercel/ai-chatbot",
     liveUrl: "https://chatbot.ai-sdk.dev",
+    image: "/projects/chatbot.png",
     stars: 14800,
     featured: true,
     author: {
@@ -165,6 +166,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["MongoDB", "Mongoose", "Express", "React", "Node.js", "Next.js", "TypeScript", "GraphQL"],
     githubUrl: "https://github.com/payloadcms/payload",
     liveUrl: "https://payloadcms.com",
+    image: "/projects/payload.png",
     stars: 31200,
     featured: true,
     author: {
@@ -259,7 +261,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Prisma", "Upstash Redis", "Tinybird"],
     githubUrl: "https://github.com/dubinc/dub",
     liveUrl: "https://dub.co",
-    image: "https://assets.dub.co/thumbnail.png",
+    image: "/projects/dub.png",
     stars: 20500,
     featured: false,
     author: {
@@ -291,7 +293,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["React", "TypeScript", "Canvas API", "WebSockets", "Node.js", "WebRTC", "Rough.js"],
     githubUrl: "https://github.com/excalidraw/excalidraw",
     liveUrl: "https://excalidraw.com",
-    image: "https://excalidraw.com/og-image-2.png",
+    image: "/projects/excalidraw.png",
     stars: 92400,
     featured: false,
     author: {
@@ -323,6 +325,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js", "React", "TypeScript", "Prisma", "PostgreSQL", "tRPC", "Tailwind CSS", "Node.js"],
     githubUrl: "https://github.com/calcom/cal.com",
     liveUrl: "https://cal.com",
+    image: "/projects/calcom.png",
     stars: 35000,
     featured: false,
     author: {
@@ -509,11 +512,20 @@ export function getProjectFallbackImage(stack?: string, slug?: string): string {
   if (slug?.includes("saas")) {
     return "/projects/saas-starter.png";
   }
-  if (slug?.includes("excalidraw")) {
-    return "https://excalidraw.com/og-image-2.png";
+  if (slug?.includes("calcom") || slug?.includes("cal.com")) {
+    return "/projects/calcom.png";
   }
   if (slug?.includes("dub")) {
-    return "https://assets.dub.co/thumbnail.png";
+    return "/projects/dub.png";
+  }
+  if (slug?.includes("excalidraw")) {
+    return "/projects/excalidraw.png";
+  }
+  if (slug?.includes("payload")) {
+    return "/projects/payload.png";
+  }
+  if (slug?.includes("chatbot") || slug?.includes("ai-chatbot")) {
+    return "/projects/chatbot.png";
   }
   if (slug?.includes("gym") || slug?.includes("exercise")) {
     return "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80";
