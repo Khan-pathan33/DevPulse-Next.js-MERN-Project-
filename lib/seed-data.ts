@@ -39,6 +39,7 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     technologies: ["Next.js 15+", "React 19", "Server Actions", "TypeScript", "Tailwind CSS", "Shopify API", "Edge Runtime"],
     githubUrl: "https://github.com/vercel/commerce",
     liveUrl: "https://demo.vercel.store",
+    image: "/projects/commerce.png",
     stars: 16400,
     featured: true,
     author: {
@@ -189,32 +190,33 @@ export const INITIAL_PROJECTS: ProjectData[] = [
     updatedAt: "2026-03-05T12:00:00.000Z",
   },
   {
-    _id: "freecodecamp-mern",
-    title: "FreeCodeCamp - Open-Source MERN Learning Platform",
-    slug: "freecodecamp-mern-platform",
-    description: "The world's largest open-source developer curriculum platform powered by MongoDB, Express, React, and Node.js microservices.",
-    longDescription: "FreeCodeCamp is the world's most acclaimed MERN stack open-source educational system. It demonstrates large-scale MongoDB aggregation pipelines, high-throughput Node.js microservices, interactive code evaluation workers, and progressive web app capabilities serving millions of daily learners.",
-    stack: "MERN",
-    technologies: ["MongoDB", "Express", "React", "Node.js", "TypeScript", "Docker", "Tailwind CSS", "Jest"],
-    githubUrl: "https://github.com/freeCodeCamp/freeCodeCamp",
-    liveUrl: "https://www.freecodecamp.org",
-    stars: 405000,
-    featured: false,
+    _id: "plane-workspace-tracking",
+    title: "Plane - Open-Source Workspace & Issue Tracking",
+    slug: "plane-workspace-tracking",
+    description: "Modern open-source Jira and Linear alternative built with Next.js App Router, TypeScript, and Docker microservices.",
+    longDescription: "Plane is an open-source project management tool to track issues, epics, and product cycles. It features modular Next.js architecture, real-time sync, customizable workflows, board and list views, and self-hosted deployment options.",
+    stack: "Next.js",
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "PostgreSQL", "Docker", "Redis"],
+    githubUrl: "https://github.com/makeplane/plane",
+    liveUrl: "https://plane.so",
+    image: "/projects/plane.png",
+    stars: 33500,
+    featured: true,
     author: {
-      name: "Quincy Larson",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
-      role: "Community Lead Architect",
+      name: "Vihan Sharma",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+      role: "Core Systems Architect",
     },
     metrics: {
-      views: 89000,
-      downloads: 45000,
-      likes: 18200,
+      views: 41200,
+      downloads: 13500,
+      likes: 3200,
     },
     architecture: [
-      "MongoDB distributed cluster handling millions of daily user progress documents",
-      "Node.js microservice architecture with asynchronous job queues",
-      "Interactive in-browser code editor running in Web Workers",
-      "Comprehensive Jest test suites with continuous integration pipelines",
+      "Next.js App Router for modular issue tracking views (Kanban, List, Calendar)",
+      "Type-safe APIs orchestrating asynchronous task queues with Redis",
+      "Optimistic state management for instant cycle and issue mutations",
+      "Self-hosted Docker orchestration with PostgreSQL relational schemas",
     ],
     createdAt: "2026-02-15T09:00:00.000Z",
     updatedAt: "2026-03-02T16:00:00.000Z",
@@ -503,6 +505,12 @@ export const INITIAL_AUDIT_LOGS: AuditLogData[] = [
 ];
 
 export function getProjectFallbackImage(stack?: string, slug?: string): string {
+  if (slug?.includes("commerce")) {
+    return "/projects/commerce.png";
+  }
+  if (slug?.includes("plane")) {
+    return "/projects/plane.png";
+  }
   if (slug?.includes("habitica")) {
     return "/projects/habitica.png";
   }
@@ -526,9 +534,6 @@ export function getProjectFallbackImage(stack?: string, slug?: string): string {
   }
   if (slug?.includes("chatbot") || slug?.includes("ai-chatbot")) {
     return "/projects/chatbot.png";
-  }
-  if (slug?.includes("gym") || slug?.includes("exercise")) {
-    return "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80";
   }
   switch (stack) {
     case "Next.js":
