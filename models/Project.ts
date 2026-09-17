@@ -9,6 +9,7 @@ export interface IProject extends Document {
   technologies: string[];
   githubUrl: string;
   liveUrl?: string;
+  image?: string;
   stars: number;
   featured: boolean;
   author: {
@@ -43,6 +44,7 @@ const ProjectSchema = new Schema<IProject>(
     technologies: [{ type: String, required: true }],
     githubUrl: { type: String, required: true },
     liveUrl: { type: String },
+    image: { type: String },
     stars: { type: Number, default: 0 },
     featured: { type: Boolean, default: false, index: true },
     author: {

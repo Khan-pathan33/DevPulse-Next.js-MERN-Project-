@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { dbService } from "@/lib/db-service";
+import { getProjectFallbackImage } from "@/lib/seed-data";
 import { UpvoteButton } from "@/components/upvote-button";
 import { ReviewForm } from "@/components/review-form";
 import { GithubIcon } from "@/components/github-icon";
@@ -12,6 +13,7 @@ import {
   Sparkles,
   CheckCircle,
   MessageSquare,
+  Globe,
 } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -168,6 +170,41 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               <Eye className="w-3.5 h-3.5 text-rose-400" />
               <span>{formatCompactNumber(project.metrics.views)} views</span>
             </div>
+          </div>
+        </div>
+
+        {/* Website Live Preview Mockup Frame */}
+        <div className="rounded-2xl overflow-hidden border border-rose-950/60 bg-[#120914] shadow-2xl mt-6">
+          <div className="h-9 bg-[#170c18] border-b border-rose-900/30 px-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block" />
+            </div>
+            <div className="flex items-center gap-1.5 text-xs font-mono text-rose-200/60 px-3 py-1 rounded-md bg-black/40 border border-rose-900/30">
+              <Globe className="w-3 h-3 text-rose-300/60" />
+              <span>{project.liveUrl ? project.liveUrl.replace(/^https?:\/\//, "") : `${project.slug}.dev`}</span>
+            </div>
+            {project.liveUrl ? (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs text-[#d8829d] hover:text-[#f3c1cf] font-semibold flex items-center gap-1 transition-colors"
+              >
+                <span>Launch Live</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <div className="w-12" />
+            )}
+          </div>
+          <div className="relative aspect-video max-h-[500px] w-full overflow-hidden bg-black/40">
+            <img
+              src={project.image || getProjectFallbackImage(project.stack, project.slug)}
+              alt={`${project.title} live website preview`}
+              className="w-full h-full object-cover object-top"
+            />
           </div>
         </div>
       </div>

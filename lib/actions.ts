@@ -23,6 +23,7 @@ export async function createProjectAction(
   const technologiesRaw = formData.get("technologies") as string;
   const githubUrl = formData.get("githubUrl") as string;
   const liveUrl = formData.get("liveUrl") as string;
+  const image = formData.get("image") as string;
   const authorName = formData.get("authorName") as string;
   const authorRole = formData.get("authorRole") as string;
 
@@ -64,6 +65,7 @@ export async function createProjectAction(
       technologies,
       githubUrl,
       liveUrl: liveUrl || undefined,
+      image: image || undefined,
       author: {
         userId: currentUser?.id,
         email: currentUser?.email,

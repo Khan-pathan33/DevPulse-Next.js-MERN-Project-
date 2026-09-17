@@ -8,6 +8,7 @@ export interface ProjectData {
   technologies: string[];
   githubUrl: string;
   liveUrl?: string;
+  image?: string;
   stars: number;
   featured: boolean;
   author: {
@@ -492,3 +493,21 @@ export const INITIAL_AUDIT_LOGS: AuditLogData[] = [
     createdAt: "2026-03-12T16:45:00.000Z",
   }
 ];
+
+export function getProjectFallbackImage(stack?: string, slug?: string): string {
+  if (slug?.includes("gym") || slug?.includes("exercise")) {
+    return "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80";
+  }
+  switch (stack) {
+    case "Next.js":
+      return "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80";
+    case "AI":
+      return "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=1200&auto=format&fit=crop&q=80";
+    case "MERN":
+      return "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80";
+    case "FullStack":
+    default:
+      return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80";
+  }
+}
+

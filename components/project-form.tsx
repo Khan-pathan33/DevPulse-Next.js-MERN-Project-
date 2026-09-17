@@ -204,6 +204,23 @@ export function ProjectForm() {
             </div>
           </div>
 
+          {/* Website Screenshot / Thumbnail URL */}
+          <div>
+            <label htmlFor="image" className="block text-xs font-semibold text-rose-200/80 mb-1.5">
+              Website Screenshot / Thumbnail Image URL (Optional)
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="url"
+              placeholder="https://images.unsplash.com/... or direct image link"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#1b131d]/90 border border-rose-400/20 text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none focus:border-[#d8829d]"
+            />
+            <p className="text-[11px] text-rose-300/50 mt-1">
+              Provide an image URL showing your live website or application preview.
+            </p>
+          </div>
+
           {/* Author info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
