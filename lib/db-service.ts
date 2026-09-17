@@ -140,7 +140,11 @@ class InMemoryDatabase {
 
   // User methods
   async getUsers(): Promise<UserData[]> {
-    return [...this.users];
+    return this.users.map(({ passwordHash, salt, ...rest }) => ({
+      ...rest,
+      passwordHash: "",
+      salt: "",
+    }));
   }
 
   async getUserByEmail(email: string): Promise<UserData | null> {
@@ -458,7 +462,10 @@ export const dbService = {
             const seedUsers = INITIAL_USERS.map(({ _id, ...u }) => u);
             await User.insertMany(seedUsers);
           }
-          const users = await User.find().sort({ createdAt: -1 }).lean();
+          const users = await User.find()
+            .select("-passwordHash -salt")
+            .sort({ createdAt: -1 })
+            .lean();
           return JSON.parse(JSON.stringify(users));
         }
       } catch (err) {
