@@ -93,54 +93,75 @@ export function HeroLiveVisualizer() {
     return audioCtxRef.current;
   }, []);
 
-  // Futuristic warm harmonic synth note for throughput ticks
+  // Futuristic warm harmonic synth note for throughput ticks (mild, soothing ambient tone)
   const playThroughputTone = useCallback((index: number) => {
     try {
       const ctx = getAudioContext();
       if (!ctx) return;
 
-      // Warm C-major / A-minor pentatonic frequencies: C5, D5, E5, G5, A5, C6
-      const freqs = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5];
+      // Soft, warm mid-range pentatonic frequencies (C4, D4, E4, G4, A4, C5)
+      const freqs = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25];
       const freq = freqs[index % freqs.length];
 
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
       osc.type = "sine";
       osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
-      // Smooth envelope with exponential decay
-      gain.gain.setValueAtTime(0.035, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+      // Warm low-pass filter to remove harshness and create a mellow, acoustic droplet feel
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(800, ctx.currentTime);
+      filter.Q.setValueAtTime(1, ctx.currentTime);
 
-      osc.connect(gain);
+      // Mild, gentle volume envelope: soft 30ms attack, smooth exponential fade-out
+      const now = ctx.currentTime;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.007, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.00005, now + 0.45);
+
+      osc.connect(filter);
+      filter.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start();
-      osc.stop(ctx.currentTime + 0.36);
+      osc.start(now);
+      osc.stop(now + 0.46);
     } catch {
       // Graceful fallback if audio is blocked
     }
   }, [getAudioContext]);
 
-  // Dual-tone interactive confirmation chime
+  // Dual-tone interactive confirmation chime (mild, subtle acoustic bell)
   const playInteractChime = useCallback(() => {
     try {
       const ctx = getAudioContext();
       if (!ctx) return;
 
       const now = ctx.currentTime;
-      [659.25, 880.0].forEach((freq, i) => {
+      // Warm, gentle notes (E4, A4)
+      [329.63, 440.0].forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
         osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, now + i * 0.08);
-        gain.gain.setValueAtTime(0.045, now + i * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.35);
-        osc.connect(gain);
+        osc.frequency.setValueAtTime(freq, now + i * 0.07);
+
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(900, now + i * 0.07);
+
+        // Very mild peak gain (0.010)
+        gain.gain.setValueAtTime(0.0001, now + i * 0.07);
+        gain.gain.linearRampToValueAtTime(0.01, now + i * 0.07 + 0.025);
+        gain.gain.exponentialRampToValueAtTime(0.00005, now + i * 0.07 + 0.4);
+
+        osc.connect(filter);
+        filter.connect(gain);
         gain.connect(ctx.destination);
-        osc.start(now + i * 0.08);
-        osc.stop(now + i * 0.08 + 0.36);
+
+        osc.start(now + i * 0.07);
+        osc.stop(now + i * 0.07 + 0.42);
       });
     } catch {
       // Graceful fallback
@@ -525,7 +546,7 @@ export function HeroLiveVisualizer() {
                     ? "bg-rose-500/20 text-[#f0afc3] border-rose-400/60 shadow-[0_0_12px_rgba(216,130,157,0.45)]"
                     : "bg-[#160f18] text-rose-300/60 hover:text-rose-200 border-rose-950/80 hover:border-rose-800/40"
                 }`}
-                title={soundEnabled ? "Live audio synthesizer active (Click to mute)" : "Click to enable live audio synthesizer"}
+                title={soundEnabled ? "Live audio synthesizer active (Mild ambient mode - Click to mute)" : "Click to enable mild ambient audio synthesizer"}
               >
                 {soundEnabled ? (
                   <>
