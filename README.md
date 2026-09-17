@@ -1,5 +1,7 @@
 # DevPulse ⚡ | Full-Stack Next.js & MERN Platform
 
+> **Developed by Pathan Nafisa Khanam**
+
 A full-stack web application showcasing **Next.js (App Router)** unified with the **MERN** technology stack (MongoDB, Express-equivalent Route Handlers, React 19 Canary, Node.js).
 
 ---

@@ -17,6 +17,10 @@ export function Footer() {
             <p className="text-xs text-rose-100/75 leading-relaxed">
               A comprehensive showcase in dusty pink aesthetics demonstrating all modern Next.js App Router paradigms unified with the MERN stack (MongoDB, Express, React 19, Node.js).
             </p>
+            <div className="p-3 rounded-xl bg-gradient-to-r from-rose-500/10 to-[#d8829d]/10 border border-rose-400/25 text-xs space-y-1">
+              <span className="text-[10px] uppercase tracking-wider text-rose-300/70 font-semibold block">Developed By</span>
+              <span className="text-sm font-bold text-white block">Pathan Nafisa Khanam</span>
+            </div>
             <div className="flex items-center gap-2 text-xs font-semibold text-[#7eb898]">
               <span className="w-2 h-2 rounded-full bg-[#7eb898] animate-pulse"></span>
               All systems operational
@@ -91,9 +95,10 @@ export function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-rose-900/20 flex flex-col sm:flex-row items-center justify-between text-xs text-rose-300/70 gap-4">
-          <p>© {new Date().getFullYear()} DevPulse Platform. Dusty Pink Edition.</p>
-          <div className="flex items-center gap-1 font-medium">
-            Designed for high performance & aesthetic excellence
+          <p>© {new Date().getFullYear()} DevPulse Platform • Developed by <strong className="text-rose-100 font-bold">Pathan Nafisa Khanam</strong></p>
+          <div className="flex items-center gap-1.5 font-medium text-rose-200/90">
+            <span>Architected with Next.js & MERN by</span>
+            <span className="text-[#f3c1cf] font-bold">Pathan Nafisa Khanam</span>
           </div>
         </div>
       </div>

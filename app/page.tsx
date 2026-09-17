@@ -86,15 +86,21 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Text, Badges, Metrics & Bouncy CTAs */}
           <div className="lg:col-span-6 text-left space-y-6">
-            {/* Release Badge with Live Pulse */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border-rose-400/40 text-xs font-semibold text-rose-200 shadow-md shadow-rose-950/40 btn-bouncy cursor-pointer">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d8829d] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#d8829d]"></span>
-              </span>
-              <span>Full-Stack MERN & Next.js App Router</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#d8829d]"></span>
-              <span className="text-[#f3c1cf] font-bold">Dusty Pink Edition</span>
+            {/* Release Badge with Live Pulse & Developer Credit */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border-rose-400/40 text-xs font-semibold text-rose-200 shadow-md shadow-rose-950/40 btn-bouncy cursor-pointer">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d8829d] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#d8829d]"></span>
+                </span>
+                <span>Full-Stack MERN & Next.js App Router</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d8829d]"></span>
+                <span className="text-[#f3c1cf] font-bold">Dusty Pink Edition</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-500/15 border border-rose-400/30 text-xs text-rose-200 shadow-sm">
+                <span className="text-rose-300/80">Developed by</span>
+                <strong className="text-white font-bold tracking-tight">Pathan Nafisa Khanam</strong>
+              </div>
             </div>
 
             {/* Main Headline */}

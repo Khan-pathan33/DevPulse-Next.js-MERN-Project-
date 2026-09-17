@@ -30,7 +30,8 @@ export const metadata: Metadata = {
     "Dusty Pink",
     "Full-Stack",
   ],
-  authors: [{ name: "DevPulse Team" }],
+  authors: [{ name: "Pathan Nafisa Khanam", url: "https://github.com/Khan-pathan33" }],
+  creator: "Pathan Nafisa Khanam",
   openGraph: {
     title: "DevPulse - Full-Stack Next.js & MERN Showcase Hub",
     description:
