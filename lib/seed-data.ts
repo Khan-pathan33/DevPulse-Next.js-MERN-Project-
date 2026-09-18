@@ -520,9 +520,9 @@ export const INITIAL_USERS: UserData[] = [
   {
     _id: "user-admin-1",
     name: "DevPulse Admin",
-    email: "admin@devpulse.io",
-    passwordHash: "2f0961f785909a954c3be6dcdaa6c6024c5011fc12ac3a48304c097f0519ece2536089007ace5c4d2271b592d8ec43209596e5f98d2160985d5194e5dbed02d1",
-    salt: "devpulse_salt_2026",
+    email: process.env.ADMIN_EMAIL || "admin@devpulse.io",
+    passwordHash: "",
+    salt: "",
     role: "admin",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
     bio: "Lead System Architect & DevPulse Platform Administrator.",

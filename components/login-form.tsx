@@ -130,7 +130,6 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
             type="email"
             name="email"
             required
-            defaultValue="admin@devpulse.io"
             placeholder="name@company.com"
             className="w-full px-4 py-2.5 rounded-xl bg-[#1b131d]/90 border border-rose-400/20 text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none focus:border-[#d8829d] transition-all"
           />
@@ -149,7 +148,6 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
             type="password"
             name="password"
             required
-            defaultValue="admin123"
             placeholder="••••••••"
             className="w-full px-4 py-2.5 rounded-xl bg-[#1b131d]/90 border border-rose-400/20 text-sm text-rose-100 placeholder-rose-300/40 focus:outline-none focus:border-[#d8829d] transition-all"
           />

@@ -346,14 +346,14 @@ DevPulse features a complete, cryptographic authentication subsystem engineered 
 - **HTTP-Only Cookies**: Set with `httpOnly: true`, `sameSite: "lax"`, `secure: production`, and 7-day expiration. Prevents client-side XSS cookie theft.
 - **Timing Attack Resistance**: Employs `crypto.timingSafeEqual` during password verification to prevent timing-based side-channel attacks.
 
-### Pre-Seeded Demo Accounts:
+### Platform Accounts & Security:
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
-| **Staff Admin** | `admin@devpulse.io` | `admin123` | Full access to `/admin`, User management, Role toggling, Moderation, Audit log |
-| **Developer** | `user@devpulse.io` | `user123` | Creator Dashboard (`/dashboard`), Project submissions, Upvoting |
+| **Staff Admin** | Configured in `.env.local` (`ADMIN_EMAIL`) | Configured in `.env.local` (`ADMIN_PASSWORD`) | Full access to `/admin`, User management, Role toggling, Moderation, Audit log |
+| **Developer Demo** | `user@devpulse.io` | `user123` (or One-Click Demo) | Creator Dashboard (`/dashboard`), Project submissions, Upvoting |
 
-> [!TIP]
-> Both demo accounts can be authenticated instantly with **One-Click Quick Sign-In** on the `/login` page without typing credentials manually.
+> [!IMPORTANT]
+> **Staff Admin Security**: Administrator credentials are never hardcoded and cannot be bypassed via one-click login. They must be set in `.env.local` on your private server and typed into `/login`.
 
 ---
 
