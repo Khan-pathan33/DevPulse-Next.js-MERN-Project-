@@ -36,7 +36,7 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
       {errorMessage === "admin_credentials_required" && (
         <div className="p-3.5 rounded-2xl bg-[#e2a76f]/15 border border-[#e2a76f]/40 text-xs text-[#f3c99f] flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-[#e2a76f] shrink-0" />
-          <span>Administrator access is strictly protected. Please enter the ADMIN_EMAIL and ADMIN_PASSWORD configured in .env.local.</span>
+          <span>Administrator access is protected. Please sign in with your administrator email and password below.</span>
         </div>
       )}
 
@@ -62,51 +62,35 @@ export function LoginForm({ redirectUrl = "/dashboard", errorMessage }: LoginFor
         </div>
       )}
 
-      {/* Instant Demo One-Click Login Cards */}
+      {/* Optional One-Click Developer Demo Access */}
       <div className="space-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-rose-300/70">
-          <Zap className="w-3.5 h-3.5 text-[#d8829d]" />
-          <span>Demo Access & Roles:</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Protected Staff Admin Info Card (Bypass Disabled for Security) */}
-          <div className="p-3.5 rounded-2xl glass-panel border border-[#e2a76f]/30 bg-[#e2a76f]/5 text-left flex flex-col justify-between select-none">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#e2a76f]/20 text-[#f3c99f] border border-[#e2a76f]/30 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-[#e2a76f]" /> Staff Admin
-              </span>
-              <span className="text-[9px] font-mono text-[#f3c99f]/70 bg-black/40 px-1.5 py-0.5 rounded border border-[#e2a76f]/20">
-                .env.local
-              </span>
-            </div>
-            <div className="text-xs font-semibold text-white">
-              Protected by Server .env
-            </div>
-            <div className="text-[10px] text-rose-300/60 mt-0.5">
-              Sign in with credentials below
-            </div>
+        <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-rose-300/70">
+          <div className="flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-[#d8829d]" />
+            <span>Developer Demo Account:</span>
           </div>
-
-          {/* Regular Developer Demo Button */}
-          <button
-            type="button"
-            disabled={isDemoPending}
-            onClick={() => handleDemoClick("user")}
-            className="btn-bouncy p-3.5 rounded-2xl glass-panel border border-[#7eb898]/30 hover:border-[#7eb898]/60 text-left transition-all cursor-pointer group shadow-sm disabled:opacity-50"
-          >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#7eb898]/15 text-[#9ad4b4] border border-[#7eb898]/30 flex items-center gap-1">
-                <User className="w-3 h-3 text-[#7eb898]" /> Developer
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 text-rose-300/50 group-hover:text-[#9ad4b4] group-hover:translate-x-0.5 transition-all" />
-            </div>
-            <div className="text-xs font-bold text-white group-hover:text-[#9ad4b4] transition-colors">
-              Alex Rivera
-            </div>
-            <div className="text-[10px] text-rose-300/60 font-mono">user@devpulse.io</div>
-          </button>
+          <span className="text-[10px] text-rose-300/50 font-normal lowercase">(instant evaluation)</span>
         </div>
+
+        <button
+          type="button"
+          disabled={isDemoPending}
+          onClick={() => handleDemoClick("user")}
+          className="btn-bouncy w-full p-3 rounded-2xl glass-panel border border-[#7eb898]/30 hover:border-[#7eb898]/60 text-left transition-all cursor-pointer group shadow-sm disabled:opacity-50 flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2.5">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#7eb898]/15 text-[#9ad4b4] border border-[#7eb898]/30 flex items-center gap-1">
+              <User className="w-3 h-3 text-[#7eb898]" /> Quick Sign-In
+            </span>
+            <span className="text-xs font-bold text-white group-hover:text-[#9ad4b4] transition-colors">
+              Alex Rivera
+            </span>
+            <span className="text-[10px] text-rose-300/60 font-mono hidden sm:inline">
+              (user@devpulse.io)
+            </span>
+          </div>
+          <ArrowRight className="w-3.5 h-3.5 text-rose-300/50 group-hover:text-[#9ad4b4] group-hover:translate-x-0.5 transition-all" />
+        </button>
       </div>
 
       <div className="relative flex items-center justify-center">
