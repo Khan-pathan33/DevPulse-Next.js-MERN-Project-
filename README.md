@@ -1,6 +1,8 @@
 # DevPulse ⚡ | Full-Stack Next.js & MERN Platform
 
 > **Developed by Pathan Nafisa Khanam**
+>
+> 📖 **[Read the Complete Website & Features Guide (WEBSITE_AND_FEATURES_GUIDE.md)](./WEBSITE_AND_FEATURES_GUIDE.md)** for an in-depth breakdown of every feature, how the REST API Playground works, where and why to use it, and role permissions.
 
 A full-stack web application showcasing **Next.js (App Router)** unified with the **MERN** technology stack (MongoDB, Express-equivalent Route Handlers, React 19 Canary, Node.js).
 
